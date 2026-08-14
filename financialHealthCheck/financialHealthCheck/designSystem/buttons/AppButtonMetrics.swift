@@ -9,12 +9,12 @@ import SwiftUI
 
 /// Layout and behavior values shared by every `AppButtonStyle` variant (Figma).
 ///
-/// Width isn't listed here: Figma specifies "hug" sizing, which is what a button already
-/// does by default in SwiftUI as long as nothing forces a `maxWidth` on it — the ~185px
-/// shown in Figma is just the result for that frame's placeholder label, not a fixed value
-/// to keep.
+/// Width isn't listed here: the button expands to fill all the width its parent gives it
+/// (`AppButtonStyle` sets `maxWidth: .infinity`) rather than hugging its label. Keeping the
+/// button flush with a screen's edges (Figma's 24pt margin) is the placing container's job —
+/// e.g. `ButtonDock` applies that horizontal padding itself.
 enum AppButtonMetrics {
-    /// Leading/trailing padding around the label.
+    /// Minimum leading/trailing padding between the label and the button's edge.
     static let horizontalPadding: CGFloat = 32
     /// Fixed (and minimum) button height.
     static let height: CGFloat = 60
@@ -24,4 +24,8 @@ enum AppButtonMetrics {
     static let borderWidth: CGFloat = 1.5
     /// Opacity applied to the whole button while `isEnabled == false`.
     static let disabledOpacity: Double = 0.5
+    /// Opacity applied to the whole button while it's being pressed, giving tap feedback.
+    static let pressedOpacity: Double = 0.7
+    /// Duration of the press-feedback opacity animation.
+    static let pressAnimationDuration: Double = 0.15
 }

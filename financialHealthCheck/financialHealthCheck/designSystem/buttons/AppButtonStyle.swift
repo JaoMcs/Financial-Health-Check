@@ -7,8 +7,9 @@
 
 import SwiftUI
 
-/// The design system's shared button shape: pill-shaped, fixed height, horizontal
-/// padding, `Body/MD-Medium` typography, and 50% opacity while disabled.
+/// The design system's shared button shape: pill-shaped, fixed height, expands to fill all
+/// available width, `Body/MD-Medium` typography, single-line label (truncates rather than
+/// wrapping), dimmed-opacity tap feedback, and 50% opacity while disabled.
 ///
 /// Only `colors` changes between the `.primary`, `.secondary`, and `.destructive`
 /// variants exposed on `ButtonStyle` — see `AppButtonColors`.
@@ -32,14 +33,21 @@ private struct AppButtonBody: View {
         configuration.label
             .typography(Typography.Body.MD.medium)
             .foregroundStyle(colors.foreground)
+            .lineLimit(1)
             .padding(.horizontal, AppButtonMetrics.horizontalPadding)
-            .frame(minHeight: AppButtonMetrics.height)
+            .frame(maxWidth: .infinity, minHeight: AppButtonMetrics.height)
             .background(colors.background)
             .overlay(
                 Capsule()
                     .strokeBorder(colors.border, lineWidth: AppButtonMetrics.borderWidth)
             )
             .clipShape(Capsule())
-            .opacity(isEnabled ? 1 : AppButtonMetrics.disabledOpacity)
+            .opacity(opacity)
+            .animation(.easeOut(duration: AppButtonMetrics.pressAnimationDuration), value: configuration.isPressed)
+    }
+
+    private var opacity: Double {
+        guard isEnabled else { return AppButtonMetrics.disabledOpacity }
+        return configuration.isPressed ? AppButtonMetrics.pressedOpacity : 1
     }
 }
