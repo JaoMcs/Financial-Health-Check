@@ -8,6 +8,9 @@
 import Foundation
 
 /// A selectable option for a `.singleChoice` or `.multipleChoice` question.
+///
+/// Usage: read from `QuestionDTO.options`; show `title` to the user and send `id` back as
+/// (or inside) the submitted `AnswerValue`.
 struct QuestionOptionDTO: DTO {
     /// The id to submit as the answer when this option is selected.
     var id: String?

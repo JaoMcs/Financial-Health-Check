@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-/// The three button looks the app uses, each mapping to a fixed `AppButtonColors` set.
+/// The three button looks the app uses. Each case maps to a fixed `AppButtonColors` set via
+/// `colors`, kept as a separate type rather than nested in `AppButton` because a nested type
+/// named `Type` would collide with Swift's own metatype syntax.
 ///
-/// Kept outside `AppButton` rather than nested (e.g. `AppButton.Type`) — a nested type
-/// named `Type` would collide with Swift's own metatype syntax (`AppButton.Type` already
-/// means "the metatype of `AppButton`").
+/// Usage: `type.colors`.
 enum AppButtonType {
     /// Solid purple fill, white label — the default call-to-action.
     case primary
@@ -20,6 +20,7 @@ enum AppButtonType {
     /// Solid red fill, white label — for destructive/irreversible actions.
     case destructive
 
+    /// The `AppButtonColors` set this case maps to.
     var colors: AppButtonColors {
         switch self {
         case .primary: .primary
@@ -33,9 +34,11 @@ enum AppButtonType {
 /// an optional icon on either side, the tap animation of a real `Button`, and 50% opacity
 /// while disabled via the standard `.disabled(_:)` modifier.
 ///
-/// The app only ever needs the three looks in `AppButtonType`, so `AppButton` owns wiring
-/// one of them to `AppButtonStyle` internally rather than exposing `AppButtonStyle`/
+/// The app only ever needs the three looks in `AppButtonType`, so `AppButton` owns wiring one
+/// of them to `AppButtonStyle` internally rather than exposing `AppButtonStyle`/
 /// `AppButtonColors` for callers to compose themselves.
+///
+/// Usage: see the `#Preview` below.
 struct AppButton: View {
     /// The button's text, always shown.
     let text: String

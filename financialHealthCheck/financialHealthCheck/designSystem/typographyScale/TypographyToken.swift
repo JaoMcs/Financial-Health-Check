@@ -13,6 +13,8 @@ import SwiftUI
 /// Figma describes line height in px and letter spacing as a percentage of the font size;
 /// this type stores the raw values and exposes them already converted to what SwiftUI
 /// expects (`tracking` in points, `lineSpacing` as extra space between lines).
+///
+/// Usage: `.font(token.font).tracking(token.tracking).lineSpacing(token.lineSpacing)`.
 struct TypographyToken {
     /// Font size in points.
     let size: CGFloat

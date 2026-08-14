@@ -8,6 +8,10 @@
 import SwiftUI
 
 /// The design system's spacing scale (Figma), used for paddings, margins, and gaps.
+///
+/// Dependencies: none.
+///
+/// Usage: `.padding(.horizontal, Spacing.lg)`.
 enum Spacing {
     static let xs: CGFloat = 4
     static let sm: CGFloat = 8

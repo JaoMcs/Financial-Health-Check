@@ -23,9 +23,11 @@ import SwiftUI
 /// `errorMessage` rather than depending on how wide the placeholder happens to be.
 ///
 /// `TextField`'s `prompt` parameter must stay a `Text`, so the placeholder is styled through
-/// `Text`'s own `font`/`tracking`/`foregroundColor` overloads (which return `Text`) instead
-/// of this file's usual `.typography`/`.foregroundStyle` view modifiers (which return `some
+/// `Text`'s own `font`/`tracking`/`foregroundColor` overloads (which return `Text`) instead of
+/// this file's usual `.typography`/`.foregroundStyle` view modifiers (which return `some
 /// View` and don't type-check there).
+///
+/// Usage: see the `#Preview` below.
 struct AppTextField: View {
     /// The field's current input.
     @Binding var text: String

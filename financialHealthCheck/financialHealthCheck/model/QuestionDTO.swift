@@ -9,6 +9,9 @@ import Foundation
 
 /// A single question served by the health-check session, returned in
 /// `HealthCheckSessionDTO.question`.
+///
+/// Usage: read `type` first to know how to render `options`/`validation`, then submit the
+/// answer as a `SubmitAnswerRequestDTO` carrying this question's `id`.
 struct QuestionDTO: DTO {
     /// Unique identifier for this question, sent back in `SubmitAnswerRequestDTO.questionId`.
     var id: String?

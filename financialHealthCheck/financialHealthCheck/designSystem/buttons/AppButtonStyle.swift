@@ -11,11 +11,18 @@ import SwiftUI
 /// available width, `Body/MD-Medium` typography, single-line label (truncates rather than
 /// wrapping), dimmed-opacity tap feedback, and 50% opacity while disabled.
 ///
-/// Only `colors` changes between the `.primary`, `.secondary`, and `.destructive`
-/// variants exposed on `ButtonStyle` — see `AppButtonColors`.
+/// Only `colors` changes between the `.primary`, `.secondary`, and `.destructive` variants
+/// exposed on `ButtonStyle` — see `AppButtonColors`.
+///
+/// Usage: `.buttonStyle(AppButtonStyle(colors: .primary))`.
 struct AppButtonStyle: ButtonStyle {
+    /// The fill/foreground/border set this instance renders — see `AppButtonColors`.
     let colors: AppButtonColors
 
+    /// Builds the button's body for `configuration`, as required by `ButtonStyle`.
+    ///
+    /// - Parameter configuration: The `ButtonStyleConfiguration` SwiftUI passes in, holding
+    ///   the button's `label` and `isPressed` state.
     func makeBody(configuration: Configuration) -> some View {
         AppButtonBody(configuration: configuration, colors: colors)
     }
@@ -46,6 +53,8 @@ private struct AppButtonBody: View {
             .animation(.easeOut(duration: AppButtonMetrics.pressAnimationDuration), value: configuration.isPressed)
     }
 
+    /// Full opacity unless disabled (`disabledOpacity`) or, while enabled, mid-press
+    /// (`pressedOpacity`).
     private var opacity: Double {
         guard isEnabled else { return AppButtonMetrics.disabledOpacity }
         return configuration.isPressed ? AppButtonMetrics.pressedOpacity : 1

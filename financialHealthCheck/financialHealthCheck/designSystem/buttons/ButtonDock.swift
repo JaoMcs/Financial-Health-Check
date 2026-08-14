@@ -17,6 +17,8 @@ import SwiftUI
 /// `isPrimaryEnabled`/`isSecondaryEnabled` disable each button independently — applying a
 /// single `.disabled(_:)` to the whole `ButtonDock` would disable both at once, since
 /// `isEnabled` cascades through the environment to every descendant.
+///
+/// Usage: see the `#Preview` below.
 struct ButtonDock: View {
     /// Label of the top, `.primary` button.
     let primaryText: String

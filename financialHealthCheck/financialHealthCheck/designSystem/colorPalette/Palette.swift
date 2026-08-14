@@ -13,6 +13,8 @@ import SwiftUI
 /// `#FFFFFF`) point at the same constant here, so a color only ever needs to change in one
 /// place. Don't use these directly outside of `DesignSystemColor` — reach for the semantic
 /// name that matches the context instead.
+///
+/// Usage: `DesignSystemColor.Primary.primary` reads `Palette.purple500`.
 enum Palette {
     static let purple100 = Color(hex: "#EEE8FF")
     static let purple500 = Color(hex: "#6334FF")

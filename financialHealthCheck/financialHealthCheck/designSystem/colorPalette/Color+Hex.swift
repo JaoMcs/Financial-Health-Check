@@ -8,8 +8,12 @@
 import SwiftUI
 
 extension Color {
-    /// Creates a `Color` from a `"#RRGGBB"` (or `"RRGGBB"`) hex string, as used by the
-    /// Figma design system. Alpha is always fully opaque.
+    /// Creates a `Color` from a `"#RRGGBB"` (or `"RRGGBB"`) hex string, as used by the Figma
+    /// design system. Alpha is always fully opaque.
+    ///
+    /// - Parameter hex: A `String` such as `"#6334FF"` or `"6334FF"`.
+    ///
+    /// Usage: `Color(hex: "#6334FF")`.
     init(hex: String) {
         var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
         hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")

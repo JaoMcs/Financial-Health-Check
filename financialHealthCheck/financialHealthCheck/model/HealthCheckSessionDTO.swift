@@ -11,13 +11,16 @@ import Foundation
 /// `POST /health-check/v1/sessions/{sessionId}` (start/resume) and
 /// `POST /health-check/v1/sessions/{sessionId}/submission` (submit answer).
 ///
-/// `sessionId` is the client-generated UUID used as the path parameter — sending the same
-/// id again resumes that session instead of starting a new one.
+/// `sessionId` is the client-generated UUID used as the path parameter — sending the same id
+/// again resumes that session instead of starting a new one.
+///
+/// Usage: decoded from either endpoint's response body, then branch on `status` to read
+/// either `question` (still in progress) or `result` (completed).
 struct HealthCheckSessionDTO: DTO {
     /// The session identifier, echoed back by the server.
     var sessionId: String?
-    /// `"in_progress"` while there are still questions left, `"completed"` once the
-    /// session has a `result`.
+    /// `"in_progress"` while there are still questions left, `"completed"` once the session
+    /// has a `result`.
     var status: String?
     /// The next question to answer. Present only while `status == "in_progress"`.
     var question: QuestionDTO?

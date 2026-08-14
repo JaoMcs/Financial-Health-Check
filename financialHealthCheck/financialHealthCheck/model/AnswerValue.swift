@@ -9,9 +9,11 @@ import Foundation
 
 /// The value submitted as a question's answer.
 ///
-/// The API expects a different JSON type depending on the question type, so this encodes
-/// and decodes as a single raw value instead of a keyed object: a string for
-/// `single_choice`, an array of strings for `multiple_choice`, or a number for `number`.
+/// The API expects a different JSON type depending on the question type, so this encodes and
+/// decodes as a single raw value instead of a keyed object: a string for `single_choice`, an
+/// array of strings for `multiple_choice`, or a number for `number`.
+///
+/// Usage: `SubmitAnswerRequestDTO(questionId: id, answer: .text("opt_1"))`.
 enum AnswerValue {
     /// `single_choice` — the selected option's id.
     case text(String)
@@ -22,6 +24,9 @@ enum AnswerValue {
 }
 
 extension AnswerValue: Codable {
+    /// Decodes whichever of `String`, `[String]`, or `Double` the JSON value actually is.
+    ///
+    /// - Parameter decoder: The `Decoder` supplying a single, un-keyed JSON value.
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let value = try? container.decode(String.self) {
@@ -41,6 +46,10 @@ extension AnswerValue: Codable {
         }
     }
 
+    /// Encodes the wrapped value alone — a `String`, `[String]`, or `Double` — with no
+    /// wrapping key.
+    ///
+    /// - Parameter encoder: The `Encoder` to write the single raw value to.
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {

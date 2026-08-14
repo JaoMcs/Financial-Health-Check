@@ -36,8 +36,8 @@ enum KeychainManager {
         SecItemAdd(attributes as CFDictionary, nil)
     }
 
-    /// Returns the stored session id, or `nil` if none has been saved yet — signaling that
-    /// no health-check session has been started on this device.
+    /// Returns the stored session id, or `nil` if none has been saved yet — signaling that no
+    /// health-check session has been started on this device.
     static func load() -> String? {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,

@@ -13,6 +13,8 @@ import SwiftUI
 /// (`AppButtonStyle` sets `maxWidth: .infinity`) rather than hugging its label. Keeping the
 /// button flush with a screen's edges (Figma's 24pt margin) is the placing container's job —
 /// e.g. `ButtonDock` applies that horizontal padding itself.
+///
+/// Usage: `.frame(minHeight: AppButtonMetrics.height)`.
 enum AppButtonMetrics {
     /// Minimum leading/trailing padding between the label and the button's edge.
     static let horizontalPadding: CGFloat = 32

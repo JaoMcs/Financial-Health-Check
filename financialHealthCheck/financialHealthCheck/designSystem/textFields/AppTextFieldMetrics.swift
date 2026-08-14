@@ -8,6 +8,8 @@
 import SwiftUI
 
 /// Layout values shared by every `AppTextField` configuration (Figma).
+///
+/// Usage: `.padding(.horizontal, AppTextFieldMetrics.horizontalPadding)`.
 enum AppTextFieldMetrics {
     /// Corner radius of the field's background/border.
     static let cornerRadius: CGFloat = 16

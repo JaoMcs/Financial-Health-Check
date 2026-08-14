@@ -9,19 +9,20 @@ import SwiftUI
 
 /// The design system's semantic colors, grouped by Figma category.
 ///
-/// Each name points at a `Palette` constant — the hex value only exists in one place;
-/// pick whichever name reads best for the context you're styling (e.g. `Text.primary` for
-/// a label, `Status.error` for a validation message).
+/// Each name points at a `Palette` constant — the hex value only exists in one place; pick
+/// whichever name reads best for the context you're styling.
+///
+/// Usage: `Text.primary` for a label, `Status.error` for a validation message.
 enum DesignSystemColor {
 
-    /// Category Primary.
+    /// Brand color and its interaction states (hover, subtle background).
     enum Primary {
         static let primary = Palette.purple500
         static let hover = Palette.purple600
         static let subtle = Palette.purple100
     }
 
-    /// Category: Background and Surface.
+    /// Screen and surface fills, from the base background to its layered tiers.
     enum BackgroundAndSurface {
         static let background = Palette.white
         static let backgroundSecondary = Palette.grey50
@@ -29,7 +30,7 @@ enum DesignSystemColor {
         static let surface = Palette.white
     }
 
-    /// Category: Text.
+    /// Label colors, including the variants used on filled/dark backgrounds.
     enum Text {
         static let primary = Palette.navy900
         static let secondary = Palette.grey500
@@ -38,7 +39,7 @@ enum DesignSystemColor {
         static let onDark = Palette.white
     }
 
-    /// Category: Border and Icon.
+    /// Outline and icon colors shared by inputs, dividers, and glyphs.
     enum BorderAndIcon {
         static let border = Palette.grey200
         static let borderStrong = Palette.grey400
@@ -46,7 +47,8 @@ enum DesignSystemColor {
         static let iconSecondary = Palette.grey500
     }
 
-    /// Category: Status.
+    /// Feedback colors — success/warning/error/info states, plus the dark and selected
+    /// backgrounds used elsewhere in the app.
     enum Status {
         static let success = Palette.green500
         static let warning = Palette.amber500
