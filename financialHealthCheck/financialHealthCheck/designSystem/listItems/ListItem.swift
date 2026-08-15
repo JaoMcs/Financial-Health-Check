@@ -42,9 +42,9 @@ struct ListItem: View {
     /// The row's main text.
     let label: String
     /// Second line shown under `label`, in `Text.secondary`. `nil` omits it entirely.
-    var description: String? = nil
+    var description: String?
     /// Icon shown at 40x40 on the row's leading edge. `nil` omits it entirely.
-    var leadingIcon: Image? = nil
+    var leadingIcon: Image?
     /// What the row shows on its trailing edge.
     var accessory: ListItemAccessory = .chevron
     /// Called when the row is tapped.

@@ -75,6 +75,7 @@ final class NavigationProgressBarView: UIView {
     }
 
     private var fraction: CGFloat {
-        CGFloat(min(max(value, 0), NavigationProgressBarMetrics.maxValue)) / CGFloat(NavigationProgressBarMetrics.maxValue)
+        let clampedValue = min(max(value, 0), NavigationProgressBarMetrics.maxValue)
+        return CGFloat(clampedValue) / CGFloat(NavigationProgressBarMetrics.maxValue)
     }
 }

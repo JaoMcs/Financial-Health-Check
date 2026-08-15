@@ -43,9 +43,9 @@ struct AppButton: View {
     /// The button's text, always shown.
     let text: String
     /// Icon shown to the left of `text`, 8pt away from it. `nil` omits it entirely.
-    var leadingIcon: Image? = nil
+    var leadingIcon: Image?
     /// Icon shown to the right of `text`, 8pt away from it. `nil` omits it entirely.
-    var trailingIcon: Image? = nil
+    var trailingIcon: Image?
     /// Which of the app's three looks to render.
     let type: AppButtonType
     /// Called when the button is tapped.

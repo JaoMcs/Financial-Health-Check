@@ -54,10 +54,15 @@ struct AppSelectControl: View {
     /// The trigger's border color: error red wins over the open/filled dark tone, which in
     /// turn wins over the default light tone.
     private var borderColor: Color {
-        if isError { DesignSystemColor.Status.error }
-        else if isOpen { DesignSystemColor.Status.selected }
-        else if selection != nil { DesignSystemColor.Status.selected }
-        else { DesignSystemColor.BorderAndIcon.border }
+        if isError {
+            DesignSystemColor.Status.error
+        } else if isOpen {
+            DesignSystemColor.Status.selected
+        } else if selection != nil {
+            DesignSystemColor.Status.selected
+        } else {
+            DesignSystemColor.BorderAndIcon.border
+        }
     }
 
     /// The trigger's border width: thicker while open or in error, otherwise the default.
@@ -167,9 +172,9 @@ struct AppSelectControl: View {
 /// One `AppSelectControl` per Figma variant: empty, filled, and error. The open look is only
 /// reachable by tapping a control in the live canvas, since `isOpen` is private.
 private struct AppSelectControlPreviewContainer: View {
-    @State private var defaultSelection: String? = nil
+    @State private var defaultSelection: String?
     @State private var chosenSelection: String? = "Option 2"
-    @State private var errorSelection: String? = nil
+    @State private var errorSelection: String?
     @State private var isError = true
 
     private let options = ["Option 1", "Option 2", "Option 3"]

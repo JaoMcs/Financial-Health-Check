@@ -34,12 +34,12 @@ struct AppTextField: View {
     /// Shown, in `Text.secondary`, whenever `text` is empty.
     let placeholder: String
     /// Symbol shown before the input (e.g. a currency sign). `nil` omits it entirely.
-    var prefix: String? = nil
+    var prefix: String?
     /// Text shown above the field, leading-aligned to it. `nil` omits it entirely.
-    var label: String? = nil
+    var label: String?
     /// Message shown below the field, leading-aligned to it, and what switches the field
     /// into its error border. `nil` omits it entirely and keeps the default border.
-    var errorMessage: String? = nil
+    var errorMessage: String?
 
     private var isError: Bool { errorMessage != nil }
 

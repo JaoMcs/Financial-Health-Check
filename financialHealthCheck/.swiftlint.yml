@@ -1,0 +1,45 @@
+# SwiftLint configuration for financialHealthCheck.
+
+excluded:
+  # SwiftLint only lints the app target — the unit test layer isn't covered.
+  - financialHealthCheckTests
+
+opt_in_rules:
+  # No `!` outside of the rare, deliberate case — matches the anti-force-unwrap stance
+  # already documented in COORDINATORS.md.
+  - force_unwrapping
+  # `[weak self]`, never `[unowned self]`, in closures — same reasoning as above.
+  - unowned_variable_capture
+  # Every `fatalError()` must include a message — already our habit in every custom
+  # `init(coder:)` override.
+  - fatal_error_message
+  # Flags structs that only hold static members — they should be a caseless `enum`
+  # instead, matching `Spacing`/`DesignSystemColor`/`Typography`/etc.
+  - convenience_type
+
+type_name:
+  # `Typography.Heading.LG`/`MD`/`SM` are 2 characters on purpose, to match Figma's own
+  # naming exactly — everything else about this rule (must start uppercase, max length)
+  # still applies to the rest of the project.
+  excluded:
+    - LG
+    - MD
+    - SM
+
+identifier_name:
+  # Custom `excluded` replaces SwiftLint's own default list (which includes `id`), so it
+  # has to be repeated here alongside the project-specific additions:
+  # `Spacing.xs/sm/md/lg/xl` and `Typography.Heading.xl/lg/md/sm/xs` match Figma's own
+  # short names on purpose.
+  excluded:
+    - id
+    - xs
+    - sm
+    - md
+    - lg
+    - xl
+
+nesting:
+  # `Typography.Body.LG/MD/SM` is 2 levels deep on purpose, mirroring Figma's
+  # `Body/LG`-style naming — the default max of 1 doesn't fit this one, deliberate case.
+  type_level: 2
