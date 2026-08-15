@@ -14,8 +14,10 @@ import SwiftUI
 enum Icon {
     static let chevronDownSmall = Image("chevron-down-small")
     static let chevronTopSmall = Image("chevron-top-small")
+    static let chevronRightSmall = Image("chevron-right-small")
     static let checkboxSelected = Image("checkboxSelected")
     static let checkboxNotSelected = Image("checkboxNotSelected")
     static let radioSelected = Image("radioSelected")
     static let radioNotSelected = Image("radioNotSelected")
+    static let backArrow = Image("backArrow")
 }

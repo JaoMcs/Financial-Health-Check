@@ -94,7 +94,7 @@ struct AppSelectControl: View {
 
                 Spacer(minLength: 0)
 
-                Image(systemName: isOpen ? "chevron.up" : "chevron.down")
+                (isOpen ? Icon.chevronTopSmall : Icon.chevronDownSmall)
                     .foregroundStyle(DesignSystemColor.BorderAndIcon.iconSecondary)
             }
             .padding(.horizontal, AppSelectControlMetrics.horizontalPadding)

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 /// A single text style from the design system: size, weight, line height, and letter
 /// spacing.
@@ -28,6 +29,21 @@ struct TypographyToken {
     /// The SwiftUI font for this token.
     var font: Font {
         .system(size: size, weight: weight)
+    }
+
+    /// The `UIFont` equivalent of `font`, for UIKit-hosted text (e.g.
+    /// `NavigationHeader`'s title) — `UIFont.Weight` isn't a `Font.Weight`, so this maps the
+    /// four weights `Typography` actually uses and falls back to `.regular` for any other
+    /// (`Font.Weight` is a struct, not an enum, so this can't be an exhaustive `switch`).
+    var uiFont: UIFont {
+        let uiWeight: UIFont.Weight
+        switch weight {
+        case .bold: uiWeight = .bold
+        case .semibold: uiWeight = .semibold
+        case .medium: uiWeight = .medium
+        default: uiWeight = .regular
+        }
+        return .systemFont(ofSize: size, weight: uiWeight)
     }
 
     /// `letterSpacingPercent` converted to points, for use with `.tracking(_:)`.
