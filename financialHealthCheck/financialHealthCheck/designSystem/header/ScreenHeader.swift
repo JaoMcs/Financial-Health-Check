@@ -7,17 +7,18 @@
 
 import SwiftUI
 
-/// The design system's screen header (Figma): a caption, a title, and a description, stacked
-/// vertically, all left-aligned and stretching to the same trailing edge.
+/// The design system's screen header (Figma): an optional caption, a title, and a
+/// description, stacked vertically, all left-aligned and stretching to the same trailing
+/// edge.
 ///
-/// - **Caption**: `Body/SM-Medium`, `Text.secondary`.
+/// - **Caption**: `Body/SM-Medium`, `Text.secondary`. Omitted entirely when `nil`.
 /// - **Title**: `Heading/SM`, `Text.primary`.
 /// - **Description**: `Body/MD`, `Text.secondary`.
 ///
-/// Usage: see the `#Preview` below.
+/// Usage: see the `#Preview`s below.
 struct ScreenHeader: View {
-    /// Small label shown above `title`.
-    let caption: String
+    /// Small label shown above `title`. Not shown at all when `nil`.
+    let caption: String?
     /// The header's main heading.
     let title: String
     /// Supporting copy shown below `title`.
@@ -25,9 +26,11 @@ struct ScreenHeader: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
-            Text(caption)
-                .typography(Typography.Body.SM.medium)
-                .foregroundStyle(DesignSystemColor.Text.secondary)
+            if let caption {
+                Text(caption)
+                    .typography(Typography.Body.SM.medium)
+                    .foregroundStyle(DesignSystemColor.Text.secondary)
+            }
 
             Text(title)
                 .typography(Typography.Heading.sm)
@@ -42,9 +45,17 @@ struct ScreenHeader: View {
     }
 }
 
-#Preview {
+#Preview("With caption") {
     ScreenHeader(
         caption: "Step 2 of 5",
+        title: "About your income",
+        description: "This helps us understand your financial situation and give you more accurate results."
+    )
+}
+
+#Preview("Without caption") {
+    ScreenHeader(
+        caption: nil,
         title: "About your income",
         description: "This helps us understand your financial situation and give you more accurate results."
     )
