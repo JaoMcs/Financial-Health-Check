@@ -5,6 +5,7 @@
 //  Created by Joao on 15/08/26.
 //
 
+import SwiftUI
 import UIKit
 
 /// The app's root coordinator — owns the window and its navigation stack, shows the splash
@@ -43,9 +44,9 @@ final class AppCoordinator: Coordinator {
         }
     }
 
-    /// Resolves the destination and shows it. Every case shows the same placeholder for
-    /// now — `ScreenStartCoordinator`/`QuestionCoordinator`/`ResultCoordinator` aren't built
-    /// yet — but each is routed independently so this doesn't need to change once they are.
+    /// Resolves the destination and shows it. `.question`/`.result` still show the same
+    /// placeholder — `QuestionCoordinator`/`ResultCoordinator` aren't built yet — but each is
+    /// routed independently so this doesn't need to change once they are.
     private func route() async {
         let destination: SplashDestination
         do {
@@ -56,7 +57,7 @@ final class AppCoordinator: Coordinator {
 
         switch destination {
         case .start:
-            navigationController.setViewControllers([ViewController()], animated: false)
+            navigationController.setViewControllers([UIHostingController(rootView: StartView())], animated: false)
         case .question:
             navigationController.setViewControllers([ViewController()], animated: false)
         case .result:

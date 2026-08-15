@@ -23,4 +23,5 @@ enum Icon {
     static let arrowReturn = Image("arrow-return")
     static let trendUp = Image("trend-up")
     static let mainImage = Image("mainImage")
+    static let rightArrowIcon = Image("right-arrow-icon")
 }
