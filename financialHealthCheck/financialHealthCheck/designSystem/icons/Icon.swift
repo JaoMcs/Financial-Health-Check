@@ -20,4 +20,6 @@ enum Icon {
     static let radioSelected = Image("radioSelected")
     static let radioNotSelected = Image("radioNotSelected")
     static let backArrow = Image("backArrow")
+    static let arrowReturn = Image("arrow-return")
+    static let trendUp = Image("trend-up")
 }
