@@ -5,7 +5,6 @@
 //  Created by Joao on 14/08/26.
 //
 
-import SwiftUI
 import UIKit
 
 /// Layout values for `NavigationProgressBarView`. Not specified in Figma beyond the colors —
@@ -67,10 +66,10 @@ final class NavigationProgressBarView: UIView {
     }
 
     private func setUpSubviews() {
-        trackView.backgroundColor = UIColor(DesignSystemColor.BorderAndIcon.border)
+        trackView.backgroundColor = DesignSystemColor.BorderAndIcon.uiBorder
         addSubview(trackView)
 
-        fillView.backgroundColor = UIColor(DesignSystemColor.Primary.primary)
+        fillView.backgroundColor = DesignSystemColor.Primary.uiPrimary
         addSubview(fillView)
     }
 

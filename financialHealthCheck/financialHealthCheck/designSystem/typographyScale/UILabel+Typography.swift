@@ -5,7 +5,6 @@
 //  Created by Joao on 14/08/26.
 //
 
-import SwiftUI
 import UIKit
 
 extension UILabel {
@@ -16,17 +15,17 @@ extension UILabel {
     /// - Parameters:
     ///   - text: The string to display.
     ///   - token: The `TypographyToken` to style it with (e.g. `Typography.Body.MD.medium`).
-    ///   - color: The text color.
+    ///   - color: The text color (e.g. `DesignSystemColor.Text.uiPrimary`).
     ///   - alignment: Baked into the attributed string's paragraph style — setting
     ///     `textAlignment` instead doesn't reliably apply once `attributedText` is set.
     ///     Defaults to `.natural`.
     ///
     /// Usage: `label.setText("Income", typography: Typography.Body.MD.medium, color:
-    /// DesignSystemColor.Text.primary, alignment: .center)`.
+    /// DesignSystemColor.Text.uiPrimary, alignment: .center)`.
     func setText(
         _ text: String,
         typography token: TypographyToken,
-        color: Color,
+        color: UIColor,
         alignment: NSTextAlignment = .natural
     ) {
         let paragraphStyle = NSMutableParagraphStyle()
@@ -37,7 +36,7 @@ extension UILabel {
             .font: token.uiFont,
             .kern: token.tracking,
             .paragraphStyle: paragraphStyle,
-            .foregroundColor: UIColor(color)
+            .foregroundColor: color
         ])
     }
 }

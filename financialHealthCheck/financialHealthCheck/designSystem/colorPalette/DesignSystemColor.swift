@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 /// The design system's semantic colors, grouped by Figma category.
 ///
@@ -13,11 +14,17 @@ import SwiftUI
 /// whichever name reads best for the context you're styling.
 ///
 /// Usage: `Text.primary` for a label, `Status.error` for a validation message.
+///
+/// A few entries also have a `ui`-prefixed `UIColor` counterpart (e.g. `Text.uiPrimary`), for
+/// UIKit code that needs to stay free of a SwiftUI import (e.g. `NavigationHeader`,
+/// `NavigationProgressBarView`) — added only for the colors a UIKit consumer actually uses,
+/// same reasoning as `TypographyToken.uiFont`.
 enum DesignSystemColor {
 
     /// Brand color and its interaction states (hover, subtle background).
     enum Primary {
         static let primary = Palette.purple500
+        static let uiPrimary = UIColor(primary)
         static let hover = Palette.purple600
         static let subtle = Palette.purple100
     }
@@ -33,6 +40,7 @@ enum DesignSystemColor {
     /// Label colors, including the variants used on filled/dark backgrounds.
     enum Text {
         static let primary = Palette.navy900
+        static let uiPrimary = UIColor(primary)
         static let secondary = Palette.grey500
         static let tertiary = Palette.grey400
         static let onPrimary = Palette.white
@@ -42,6 +50,7 @@ enum DesignSystemColor {
     /// Outline and icon colors shared by inputs, dividers, and glyphs.
     enum BorderAndIcon {
         static let border = Palette.grey200
+        static let uiBorder = UIColor(border)
         static let borderStrong = Palette.grey400
         static let iconPrimary = Palette.navy900
         static let iconSecondary = Palette.grey500

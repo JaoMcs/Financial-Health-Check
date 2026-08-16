@@ -5,8 +5,17 @@
 //  Created by Joao on 15/08/26.
 //
 
-import SwiftUI
 import UIKit
+
+/// Where `AppCoordinator` routes to once it's resolved the current session state.
+enum SplashDestination {
+    /// No persisted session yet — the flow's very first screen.
+    case start
+    /// A persisted session, still in progress, resuming on this question.
+    case question(QuestionDTO, ProgressDTO)
+    /// A persisted session that already reached its result.
+    case result(ResultDTO)
+}
 
 /// The app's root coordinator — owns the window and its navigation stack, shows the splash
 /// screen, and starts whichever flow the resolved session state points to.
@@ -57,11 +66,17 @@ final class AppCoordinator: Coordinator {
 
         switch destination {
         case .start:
-            navigationController.setViewControllers([UIHostingController(rootView: StartView())], animated: false)
+            let startCoordinator = StartCoordinator(navigationController: navigationController)
+            childCoordinators.append(startCoordinator)
+            startCoordinator.start()
         case .question:
-            navigationController.setViewControllers([ViewController()], animated: false)
+            let questionCoordinator = QuestionCoordinator(navigationController: navigationController)
+            childCoordinators.append(questionCoordinator)
+            questionCoordinator.start()
         case .result:
-            navigationController.setViewControllers([ViewController()], animated: false)
+            let resultCoordinator = ResultCoordinator(navigationController: navigationController)
+            childCoordinators.append(resultCoordinator)
+            resultCoordinator.start()
         }
     }
 
@@ -69,12 +84,15 @@ final class AppCoordinator: Coordinator {
         guard repository.hasExistingSession() else { return .start }
 
         let session = try await repository.startSession()
-        switch (session.status, session.result, session.question, session.progress) {
-        case ("completed", let result?, _, _):
+
+        if session.status == "completed",
+           let result = session.result {
             return .result(result)
-        case ("in_progress", _, let question?, let progress?):
+        } else if session.status == "in_progress",
+                  let question = session.question,
+                  let progress = session.progress {
             return .question(question, progress)
-        default:
+        } else {
             throw NetworkError.invalidResponse
         }
     }

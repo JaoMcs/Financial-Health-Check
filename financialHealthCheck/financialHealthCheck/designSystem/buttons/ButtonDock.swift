@@ -32,13 +32,20 @@ struct ButtonDock: View {
     var isPrimaryEnabled: Bool = true
     /// Whether the secondary button can be tapped, independent of the primary one.
     var isSecondaryEnabled: Bool = true
+    /// Icon shown to the left of `secondaryText`. `nil` omits it entirely.
+    var secondaryLeadingIcon: Image?
 
     var body: some View {
         VStack(spacing: Spacing.sm) {
             AppButton(text: primaryText, type: .primary, action: primaryAction)
                 .disabled(!isPrimaryEnabled)
-            AppButton(text: secondaryText, type: .secondary, action: secondaryAction)
-                .disabled(!isSecondaryEnabled)
+            AppButton(
+                text: secondaryText,
+                leadingIcon: secondaryLeadingIcon,
+                type: .secondary,
+                action: secondaryAction
+            )
+            .disabled(!isSecondaryEnabled)
         }
         .padding(.horizontal, Spacing.twoXl)
     }

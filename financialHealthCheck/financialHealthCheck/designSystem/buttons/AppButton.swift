@@ -55,9 +55,11 @@ struct AppButton: View {
         Button(action: action) {
             HStack(spacing: 0) {
                 leadingIcon?
+                    .renderingMode(.template)
                     .padding(.trailing, AppButtonMetrics.gap)
                 Text(text)
                 trailingIcon?
+                    .renderingMode(.template)
                     .padding(.leading, AppButtonMetrics.gap)
             }
         }

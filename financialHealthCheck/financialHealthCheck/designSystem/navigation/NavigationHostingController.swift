@@ -1,0 +1,73 @@
+//
+//  NavigationHostingController.swift
+//  financialHealthCheck
+//
+//  Created by Joao on 16/08/26.
+//
+
+import SwiftUI
+import UIKit
+
+/// Hosts a SwiftUI screen as a child view controller and installs a `NavigationHeader` on
+/// itself, so a coordinator gets the SwiftUI-hosting + header-installing steps in one call
+/// instead of doing both itself every time it pushes a screen.
+///
+/// A plain `UIViewController` wrapping a `UIHostingController<Content>` child — not a
+/// `UIHostingController` subclass itself — because `NavigationHeader` adds
+/// `NavigationProgressBarView` as a sibling subview. Adding it directly inside a
+/// `UIHostingController`'s own view isn't supported (SwiftUI manages that view's hierarchy
+/// internally); this way, the hosted content and the progress bar are both plain subviews of
+/// this controller's own `view`, a common superview SwiftUI doesn't touch.
+///
+/// - Parameters:
+///   - rootView: The SwiftUI screen to host.
+///   - title: Forwarded to `NavigationHeader`.
+///   - progress: Forwarded to `NavigationHeader`. `0` (the default) hides the progress bar.
+///
+/// Usage: `NavigationHostingController(rootView: QuestionaryView(viewModel: viewModel), title:
+/// "Question", progress: 1)`.
+final class NavigationHostingController<Content: View>: UIViewController {
+    private let hostingController: UIHostingController<Content>
+    private let headerTitle: String
+    private let headerProgress: Int
+
+    init(rootView: Content, title: String, progress: Int = 0) {
+        self.hostingController = UIHostingController(rootView: rootView)
+        self.headerTitle = title
+        self.headerProgress = progress
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required dynamic init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        embedHostingController()
+        NavigationHeader.install(title: headerTitle, progress: headerProgress, on: self)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NavigationHeader.styleBackButton(on: navigationController)
+    }
+
+    /// Adds `hostingController` as a child, filling this controller's `view` edge to edge —
+    /// standard UIKit child-view-controller containment, so its view stays a plain subview
+    /// `NavigationHeader` can add `NavigationProgressBarView` alongside.
+    private func embedHostingController() {
+        addChild(hostingController)
+        view.addSubview(hostingController.view)
+        hostingController.didMove(toParent: self)
+
+        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            hostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+}
