@@ -7,38 +7,46 @@
 
 import Combine
 
-/// `QuestionaryView`'s view model. Static/mocked for now — `question` is hardcoded instead of
-/// coming from `HealthCheckRepository`.
+/// `QuestionaryView`'s view model.
 final class QuestionaryViewModel: ObservableObject {
-    private let question = QuestionDTO(
-        id: "income_stability",
-        title: "How predictable is your income?",
-        description: nil,
-        type: .singleChoice,
-        options: [
-            QuestionOptionDTO(id: "very_stable", title: "Very predictable"),
-            QuestionOptionDTO(id: "mostly_stable", title: "Mostly predictable"),
-            QuestionOptionDTO(id: "variable", title: "It varies significantly"),
-            QuestionOptionDTO(id: "unpredictable", title: "Very unpredictable")
-        ],
-        validation: QuestionValidationDTO(required: true, min: nil, max: nil, minSelections: nil, maxSelections: nil)
-    )
+    private let repository: HealthCheckRepositoring
+    private let session: HealthCheckSessionDTO?
 
-    /// Called when the user taps "Continue". Set by `QuestionCoordinator` — empty for now.
-    var onContinueTapped: (() -> Void)?
+    /// The selected option's title, for `.singleChoice`. Bound to `RadioButtonList`, which
+    /// tracks selection by title rather than id.
+    @Published var singleSelection: String?
+    /// The selected options' titles, for `.multipleChoice`. Bound to `CheckboxList`, same
+    /// title-based tracking as `singleSelection`.
+    @Published var multipleSelections: [String] = []
+    /// The entered value, for `.number`. Bound to `AppTextField`.
+    @Published var numberText = ""
+
+    /// The session `submitAnswer()` resolved, once it returns.
+    @Published private(set) var nextSession: HealthCheckSessionDTO?
+
+    /// Called when the user taps "Continue", with the session `submitAnswer()` resolved. Set
+    /// by `QuestionCoordinator` — empty for now.
+    var onContinueTapped: ((HealthCheckSessionDTO?) -> Void) = { _ in }
+
+    var onResultTapped: ((ResultDTO?) -> Void) = { _ in }
 
     var title: String {
-        question.title ?? ""
+        session?.question?.title ?? ""
     }
 
     var description: String {
-        question.description ?? ""
+        session?.question?.description ?? ""
+    }
+
+    init(repository: HealthCheckRepositoring, session: HealthCheckSessionDTO?) {
+        self.repository = repository
+        self.session = session
     }
 
     /// `question.type`/`options` mapped to the shape `QuestionaryView` renders.
     var content: QuestionaryContent {
-        let options = (question.options ?? []).compactMap(\.title)
-        switch question.type {
+        let options = (session?.question?.options ?? []).compactMap(\.title)
+        switch session?.question?.type {
         case .singleChoice:
             return .singleChoice(options: options)
         case .multipleChoice:
@@ -48,7 +56,83 @@ final class QuestionaryViewModel: ObservableObject {
         }
     }
 
+    /// Whether the user has selected/entered something to submit — the "Continue" button is
+    /// disabled while this is `false`.
+    var isAnswerSelected: Bool {
+        !singleSelection.isNilOrEmpty || !multipleSelections.isEmpty || !numberText.isEmpty
+    }
+
+    /// The number field's helper text — always shown, stating its allowed range.
+    /// `isNumberInvalid` is what colors it (and the field's border) as an error.
+    var numberRangeMessage: String {
+        Strings.Question.numberRangeMessage(
+            min: session?.question?.validation?.min ?? 0,
+            max: session?.question?.validation?.max ?? 0
+        )
+    }
+
+
+
+    // TODO: - corrigir essa função (esquisitona)
+    /// Whether `numberText` is non-empty but isn't a whole number within
+    /// `validation.min`/`max`.
+    var isNumberInvalid: Bool {
+        guard !numberText.isEmpty else { return false }
+
+        let min = session?.question?.validation?.min ?? 0
+        let max = session?.question?.validation?.max ?? 0
+
+        guard let value = Int(numberText), value >= min, value <= max else {
+            return true
+        }
+        return false
+    }
+
     func continueTapped() {
-        onContinueTapped?()
+        Task {
+            await submitAnswer()
+        }
+    }
+
+    func submitAnswer() async {
+        guard let answer = makeAnswer() else { return }
+
+        do {
+            let request = SubmitAnswerRequestDTO(questionId: session?.question?.id, answer: answer)
+            nextSession = try await repository.submitAnswer(request)
+            if nextSession?.status == "completed" {
+                onResultTapped(nextSession?.result)
+            } else {
+                onContinueTapped(nextSession)
+            }
+        } catch {
+            // TODO: - Tratamento de erro
+            print("erro")
+        }
+    }
+// Usar em algum momento pra setar o erro no multipla escolha ou pelo menos lockar o botão
+//    minSelections?: number   // multiple_choice
+//    maxSelections?: number   // multiple_choice
+
+
+    /// Maps the user's current selection to the shape the API expects — `nil` if nothing's
+    /// been selected/entered yet.
+    func makeAnswer() -> AnswerValue? {
+        if let optionId = optionId(forTitle: singleSelection) {
+            return .text(optionId)
+        } else if !multipleSelections.isEmpty {
+            let optionIds = multipleSelections.compactMap { optionId(forTitle: $0) }
+            return optionIds.isEmpty ? nil : .choices(optionIds)
+        } else if let number = Double(numberText) {
+            return .number(number)
+        }
+        return nil
+    }
+
+    /// Maps a `RadioButtonList`/`CheckboxList` option's displayed title back to its `id`.
+    ///
+    /// - Parameter title: The selected option's title.
+    private func optionId(forTitle title: String?) -> String? {
+        session?.question?.options?.first { $0.title == title }?.id
     }
 }

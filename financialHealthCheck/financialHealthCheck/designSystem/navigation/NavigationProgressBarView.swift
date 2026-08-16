@@ -13,34 +13,22 @@ enum NavigationProgressBarMetrics {
     /// The view's height. Also its corner radius (half of it, on both the track and the
     /// fill), so both ends stay rounded.
     static let height: CGFloat = 4
-    /// The highest `value` `NavigationProgressBarView` accepts — full width, fully filled.
-    static let maxValue = 6
 }
 
 /// The design system's navigation progress bar (Figma): `Primary.primary` (`#6334FF`) filling
 /// over a `BorderAndIcon.border` (`#DAD7EE`) track, for screens in a fixed-length flow (e.g.
 /// "question 3 of 5").
 ///
-/// `value` runs `0...6`: `0` renders an empty fill (`NavigationHeader` is what actually hides
-/// the bar, by collapsing its height to `0`), `1...5` fill it proportionally, and `6` is
-/// fully filled — one past the flow's last step, for a "completed" screen that comes after it.
-///
 /// The fill is sized in `layoutSubviews` rather than with an Auto Layout multiplier, so
-/// changing `value` never needs its constraint torn down and rebuilt — just
+/// changing progress never needs its constraint torn down and rebuilt — just
 /// `layoutIfNeeded()`, which this animates so the fill visibly slides to its new width.
 ///
-/// Usage: `progressBarView.value = 3` for "step 3 of 5".
+/// Usage: `progressBarView.setProgress(current: 3, total: 5)` for "step 3 of 5".
 final class NavigationProgressBarView: UIView {
-    /// How much of the bar is filled, `0...6` (values outside that range are clamped).
-    /// Animates the fill to its new width.
-    var value: Int = 0 {
-        didSet {
-            setNeedsLayout()
-            UIView.animate(withDuration: 0.3) {
-                self.layoutIfNeeded()
-            }
-        }
-    }
+    /// How many of `total` steps are done. Set via `setProgress(current:total:)`.
+    private(set) var current = 0
+    /// The flow's total step count. Set via `setProgress(current:total:)`.
+    private(set) var total = 0
 
     private let trackView = UIView()
     private let fillView = UIView()
@@ -53,6 +41,23 @@ final class NavigationProgressBarView: UIView {
     @available(*, unavailable, message: "Use init(frame:) instead.")
     required dynamic init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    /// Sets how far along a `total`-step flow this screen is, animating the fill to its new
+    /// width.
+    ///
+    /// - Parameters:
+    ///   - current: How many steps are done, e.g. `3` for "step 3 of 5". Clamped to
+    ///     `0...total`.
+    ///   - total: The flow's total step count.
+    func setProgress(current: Int, total: Int) {
+        self.total = max(total, 0)
+        self.current = min(max(current, 0), self.total)
+
+        setNeedsLayout()
+        UIView.animate(withDuration: 0.3) {
+            self.layoutIfNeeded()
+        }
     }
 
     override func layoutSubviews() {
@@ -74,7 +79,7 @@ final class NavigationProgressBarView: UIView {
     }
 
     private var fraction: CGFloat {
-        let clampedValue = min(max(value, 0), NavigationProgressBarMetrics.maxValue)
-        return CGFloat(clampedValue) / CGFloat(NavigationProgressBarMetrics.maxValue)
+        guard total > 0 else { return 0 }
+        return CGFloat(current) / CGFloat(total)
     }
 }

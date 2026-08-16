@@ -8,23 +8,58 @@
 import SwiftUI
 import UIKit
 
-/// Shows the flow's result screen (`ResultView`). Just that for now — score/title/description
-/// are hardcoded until `ResultView` has a view model.
+/// Shows the flow's result screen (`ResultView`).
 ///
-/// - Parameter navigationController: The stack this flow shows its screen on.
+/// - Parameters:
+///   - navigationController: The stack this flow shows its screen on.
+///   - repository: Passed down to `ResultViewModel`.
+///   - result: The result the last `submitAnswer()` call resolved. Passed down to
+///     `ResultViewModel`.
 final class ResultCoordinator: Coordinator {
     private let navigationController: UINavigationController
+    private let repository: HealthCheckRepositoring
+    private let result: ResultDTO?
+    private var childCoordinators: [Coordinator] = []
 
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController,
+         repository: HealthCheckRepositoring,
+         result: ResultDTO?) {
         self.navigationController = navigationController
+        self.repository = repository
+        self.result = result
     }
 
     func start() {
-        let view = ResultView(
-            score: 78,
-            title: "Solid ground",
-            description: "Good habits, small gains still available."
-        )
-        navigationController.setViewControllers([UIHostingController(rootView: view)], animated: false)
+        let viewModel = ResultViewModel(repository: repository, result: result)
+        configure(viewModel)
+        let view = ResultView(viewModel: viewModel)
+        navigationController.setViewControllers([UIHostingController(rootView: view)],
+                                                animated: true)
     }
+
+    /// Sets `viewModel`'s closures to this coordinator's own navigation.
+    ///
+    /// - Parameter viewModel: The view model to configure.
+    private func configure(_ viewModel: ResultViewModel) {
+        viewModel.onFinishTapped = { [weak self] in
+            self?.goToFinish()
+        }
+        viewModel.onRetakeTapped = { [weak self] in
+            self?.goToStart()
+        }
+    }
+
+    private func goToStart() {
+        let startCoordinator = StartCoordinator(
+            navigationController: navigationController,
+            repository: repository
+        )
+        childCoordinators.append(startCoordinator)
+        startCoordinator.start()
+    }
+
+    private func goToFinish() {
+
+    }
+
 }

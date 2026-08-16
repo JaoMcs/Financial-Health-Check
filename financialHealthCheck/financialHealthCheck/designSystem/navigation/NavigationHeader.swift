@@ -22,7 +22,7 @@ enum NavigationHeaderMetrics {
 /// `UIViewController`/`UINavigationBar` passed in, with nothing to keep an instance around
 /// for.
 ///
-/// Usage: `NavigationHeader.install(title: "Income", progress: 2, on: self)`.
+/// Usage: `NavigationHeader.install(title: "Income", current: 2, total: 5, on: self)`.
 enum NavigationHeader {
     /// Installs `title` (as `viewController.navigationItem.titleView`) and a
     /// `NavigationProgressBarView` (pinned full-width to `viewController.view`'s safe area,
@@ -30,11 +30,12 @@ enum NavigationHeader {
     ///
     /// - Parameters:
     ///   - title: The screen's title.
-    ///   - progress: Forwarded to `NavigationProgressBarView`. `0` (the default) collapses the
-    ///     progress bar's height to `0`, hiding it.
+    ///   - current: Forwarded to `NavigationProgressBarView.setProgress(current:total:)`.
+    ///   - total: Forwarded to `NavigationProgressBarView.setProgress(current:total:)`. `0`
+    ///     (the default) collapses the progress bar's height to `0`, hiding it.
     ///   - viewController: The screen to install this header on. Call this once, from its
     ///     `viewDidLoad`.
-    static func install(title: String, progress: Int = 0, on viewController: UIViewController) {
+    static func install(title: String, current: Int = 0, total: Int = 0, on viewController: UIViewController) {
         let titleLabel = UILabel()
         titleLabel.setText(
             title,
@@ -47,7 +48,7 @@ enum NavigationHeader {
         viewController.navigationItem.titleView = titleLabel
 
         let progressBarView = NavigationProgressBarView()
-        progressBarView.value = progress
+        progressBarView.setProgress(current: current, total: total)
         progressBarView.translatesAutoresizingMaskIntoConstraints = false
         viewController.view.addSubview(progressBarView)
 
@@ -57,7 +58,7 @@ enum NavigationHeader {
             progressBarView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
             progressBarView.topAnchor.constraint(equalTo: safeArea.topAnchor),
             progressBarView.heightAnchor.constraint(
-                equalToConstant: progress > 0 ? NavigationProgressBarMetrics.height : 0
+                equalToConstant: total > 0 ? NavigationProgressBarMetrics.height : 0
             )
         ])
     }

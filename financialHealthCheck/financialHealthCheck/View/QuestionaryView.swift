@@ -23,10 +23,6 @@ enum QuestionaryContent {
 struct QuestionaryView: View {
     @ObservedObject var viewModel: QuestionaryViewModel
 
-    @State private var singleSelection: String?
-    @State private var multipleSelections: Set<String> = []
-    @State private var numberText = ""
-
     var body: some View {
         VStack(spacing: 0) {
             ScreenHeader(
@@ -47,6 +43,7 @@ struct QuestionaryView: View {
                 type: .primary,
                 action: viewModel.continueTapped
             )
+            .disabled(!viewModel.isAnswerSelected)
             .padding(.horizontal, Spacing.twoXl)
         }
     }
@@ -55,15 +52,28 @@ struct QuestionaryView: View {
     private var contentView: some View {
         switch viewModel.content {
         case .singleChoice(let options):
-            RadioButtonList(selection: $singleSelection, options: options)
+            RadioButtonList(selection: $viewModel.singleSelection, options: options)
         case .multipleChoice(let options):
-            CheckboxList(selections: $multipleSelections, options: options)
+            CheckboxList(
+                selections: Binding(
+                    get: { Set(viewModel.multipleSelections) },
+                    set: { viewModel.multipleSelections = Array($0) }
+                ),
+                options: options
+            )
         case .number:
-            AppTextField(text: $numberText, placeholder: "0")
+            AppTextField(
+                text: $viewModel.numberText,
+                placeholder: Strings.Question.numberPlaceholder,
+                prefix: Strings.Question.numberPrefix,
+                message: viewModel.numberRangeMessage,
+                isError: viewModel.isNumberInvalid
+            )
         }
     }
 }
 
 #Preview {
-    QuestionaryView(viewModel: QuestionaryViewModel())
+    let repository = HealthCheckRepository(networkManager: NetworkManager())
+    QuestionaryView(viewModel: QuestionaryViewModel(repository: repository, session: nil))
 }

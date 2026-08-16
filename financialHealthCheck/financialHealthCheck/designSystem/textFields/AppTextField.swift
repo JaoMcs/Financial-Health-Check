@@ -13,14 +13,14 @@ import SwiftUI
 ///
 /// Every variant in Figma ("default", "with prefix", "with label", "error state") is this
 /// same view, just configured differently, rather than a separate type per variant:
-/// - **With prefix**: pass `prefix` (e.g. `"£"`) to show a symbol before the input.
-/// - **With label**: pass `label` to show text above the field, leading-aligned to it.
-/// - **Error state**: pass `errorMessage` to switch the border to `Status.error` at 2pt and
-///   show that message below the field, also leading-aligned.
+/// - **With prefix**: pass `prefix` (e.g. `"€"`) to show a symbol before the input.
+/// - **With message**: pass `message` to show text below the field, leading-aligned to it.
+/// - **Error state**: also pass `isError: true` to switch the border and `message` to
+///   `Status.error` — `message` itself doesn't change, only its color and the border's.
 ///
 /// The field expands to fill all available width (matching `AppButton`'s sizing), which is
-/// what makes "leading-aligned to the field" a meaningful position for `label` and
-/// `errorMessage` rather than depending on how wide the placeholder happens to be.
+/// what makes "leading-aligned to the field" a meaningful position for `message` rather than
+/// depending on how wide the placeholder happens to be.
 ///
 /// `TextField`'s `prompt` parameter must stay a `Text`, so the placeholder is styled through
 /// `Text`'s own `font`/`tracking`/`foregroundColor` overloads (which return `Text`) instead of
@@ -35,23 +35,15 @@ struct AppTextField: View {
     let placeholder: String
     /// Symbol shown before the input (e.g. a currency sign). `nil` omits it entirely.
     var prefix: String?
-    /// Text shown above the field, leading-aligned to it. `nil` omits it entirely.
-    var label: String?
-    /// Message shown below the field, leading-aligned to it, and what switches the field
-    /// into its error border. `nil` omits it entirely and keeps the default border.
-    var errorMessage: String?
-
-    private var isError: Bool { errorMessage != nil }
+    /// Shown below the field, leading-aligned to it. `nil` omits it entirely. Same text
+    /// whether it's a plain hint or an error — `isError` is what changes its color.
+    var message: String?
+    /// Whether `message` and the field's border render in `Status.error` instead of their
+    /// default colors.
+    var isError = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            if let label {
-                Text(label)
-                    .typography(Typography.Body.SM.medium)
-                    .foregroundStyle(DesignSystemColor.Text.primary)
-                    .padding(.bottom, AppTextFieldMetrics.labelGap)
-            }
-
             HStack(spacing: AppTextFieldMetrics.prefixGap) {
                 if let prefix {
                     Text(prefix)
@@ -84,36 +76,37 @@ struct AppTextField: View {
             )
             .clipShape(RoundedRectangle(cornerRadius: AppTextFieldMetrics.cornerRadius))
 
-            if let errorMessage {
-                Text(errorMessage)
+            if let message {
+                Text(message)
                     .typography(Typography.Body.SM.regular)
-                    .foregroundStyle(DesignSystemColor.Status.error)
+                    .foregroundStyle(isError ? DesignSystemColor.Status.error : DesignSystemColor.Text.secondary)
                     .padding(.top, AppTextFieldMetrics.labelGap)
             }
         }
     }
 }
 
-/// One `AppTextField` per Figma variant: default, with a currency prefix, with a label, and
+/// One `AppTextField` per Figma variant: default, with a currency prefix, with a message, and
 /// in its error state.
 private struct AppTextFieldPreviewContainer: View {
     @State private var defaultText = ""
     @State private var prefixText = ""
-    @State private var labelText = ""
+    @State private var messageText = ""
     @State private var errorText = "12345"
 
     var body: some View {
         VStack(spacing: Spacing.lg) {
             AppTextField(text: $defaultText, placeholder: "Placeholder")
 
-            AppTextField(text: $prefixText, placeholder: "0.00", prefix: "£")
+            AppTextField(text: $prefixText, placeholder: "0.00", prefix: "€")
 
-            AppTextField(text: $labelText, placeholder: "Placeholder", label: "Label")
+            AppTextField(text: $messageText, placeholder: "Placeholder", message: "Helper text")
 
             AppTextField(
                 text: $errorText,
                 placeholder: "Placeholder",
-                errorMessage: "This field is required"
+                message: "This field is required",
+                isError: true
             )
         }
         .padding(.horizontal, Spacing.twoXl)

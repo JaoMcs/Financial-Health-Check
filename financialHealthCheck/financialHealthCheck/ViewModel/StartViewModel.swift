@@ -7,14 +7,33 @@
 
 import Combine
 
-/// `StartView`'s view model. `ObservableObject` for consistency with every other
-/// ViewModel — no `@Published` state yet, but this is the shape every screen's ViewModel
-/// follows.
+/// `StartView`'s view model.
 final class StartViewModel: ObservableObject {
-    /// Called when the user taps "Start". Set by `StartCoordinator` — empty for now.
-    var onStartTapped: (() -> Void) = {}
+    private let repository: HealthCheckRepositoring
+
+    // TODO: - documentar dps
+    @Published var session: HealthCheckSessionDTO?
+
+    /// Called when the user taps "Start", with the session `startSession()` resolved. Set by
+    /// `StartCoordinator` — empty for now.
+    var onStartTapped: ((HealthCheckSessionDTO?) -> Void) = { _ in }
+
+    init(repository: HealthCheckRepositoring) {
+        self.repository = repository
+    }
 
     func startTapped() {
-        onStartTapped()
+        Task {
+            await startSession()
+            onStartTapped(session)
+        }
+    }
+
+    func startSession() async {
+        do {
+            session = try await repository.startSession()
+        } catch {
+            // TODO: - Tratamento de erro
+        }
     }
 }

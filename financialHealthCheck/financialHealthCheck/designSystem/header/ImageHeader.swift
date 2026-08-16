@@ -11,8 +11,8 @@ import SwiftUI
 enum ImageHeaderMedia {
     /// A 200x200 image.
     case image(Image)
-    /// A `ScoreDisplay` (240x240), showing `score` out of 100.
-    case score(Int)
+    /// A `ScoreDisplay` (240x240), showing `value` out of `maxScore`.
+    case score(value: Int, maxScore: Int)
 }
 
 /// The design system's centered image header (Figma): `media`, a title, and a description,
@@ -28,7 +28,7 @@ enum ImageHeaderMedia {
 ///   - description: Supporting copy shown below `title`.
 ///
 /// Usage: `ImageHeader(media: .image(Icon.mainImage), title: "...", description: "...")`, or
-/// `ImageHeader(media: .score(78), title: "...", description: "...")`.
+/// `ImageHeader(media: .score(value: 78, maxScore: 100), title: "...", description: "...")`.
 struct ImageHeader: View {
     let media: ImageHeaderMedia
     let title: String
@@ -62,8 +62,8 @@ struct ImageHeader: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 200, height: 200)
-        case .score(let score):
-            ScoreDisplay(score: score)
+        case .score(let value, let maxScore):
+            ScoreDisplay(score: value, maxScore: maxScore)
         }
     }
 }
@@ -78,7 +78,7 @@ struct ImageHeader: View {
 
 #Preview("Score") {
     ImageHeader(
-        media: .score(78),
+        media: .score(value: 78, maxScore: 100),
         title: "Solid ground",
         description: "Good habits, small gains still available."
     )

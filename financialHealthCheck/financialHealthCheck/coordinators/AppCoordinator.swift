@@ -12,7 +12,7 @@ enum SplashDestination {
     /// No persisted session yet — the flow's very first screen.
     case start
     /// A persisted session, still in progress, resuming on this question.
-    case question(QuestionDTO, ProgressDTO)
+    case question(HealthCheckSessionDTO)
     /// A persisted session that already reached its result.
     case result(ResultDTO)
 }
@@ -53,9 +53,11 @@ final class AppCoordinator: Coordinator {
         }
     }
 
-    /// Resolves the destination and shows it. `.question`/`.result` still show the same
-    /// placeholder — `QuestionCoordinator`/`ResultCoordinator` aren't built yet — but each is
-    /// routed independently so this doesn't need to change once they are.
+    /// Resolves the destination and shows it. Clears the splash from `navigationController`
+    /// first — it's not a real screen, so whichever coordinator starts next shouldn't have it
+    /// sitting underneath as a back target. Pushing onto an empty stack already behaves like
+    /// setting a root (no back button), so this is enough on its own; no coordinator needs to
+    /// know whether it's first.
     private func route() async {
         let destination: SplashDestination
         do {
@@ -64,17 +66,30 @@ final class AppCoordinator: Coordinator {
             destination = .start
         }
 
+        navigationController.setViewControllers([], animated: false)
+
         switch destination {
         case .start:
-            let startCoordinator = StartCoordinator(navigationController: navigationController)
+            let startCoordinator = StartCoordinator(
+                navigationController: navigationController,
+                repository: repository
+            )
             childCoordinators.append(startCoordinator)
             startCoordinator.start()
-        case .question:
-            let questionCoordinator = QuestionCoordinator(navigationController: navigationController)
+        case .question(let session):
+            let questionCoordinator = QuestionCoordinator(
+                navigationController: navigationController,
+                repository: repository,
+                session: session
+            )
             childCoordinators.append(questionCoordinator)
             questionCoordinator.start()
-        case .result:
-            let resultCoordinator = ResultCoordinator(navigationController: navigationController)
+        case .result(let result):
+            let resultCoordinator = ResultCoordinator(
+                navigationController: navigationController,
+                repository: repository,
+                result: result
+            )
             childCoordinators.append(resultCoordinator)
             resultCoordinator.start()
         }
@@ -86,12 +101,10 @@ final class AppCoordinator: Coordinator {
         let session = try await repository.startSession()
 
         if session.status == "completed",
-           let result = session.result {
+            let result = session.result {
             return .result(result)
-        } else if session.status == "in_progress",
-                  let question = session.question,
-                  let progress = session.progress {
-            return .question(question, progress)
+        } else if session.status == "in_progress" {
+            return .question(session)
         } else {
             throw NetworkError.invalidResponse
         }

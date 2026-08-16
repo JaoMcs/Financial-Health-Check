@@ -22,19 +22,22 @@ import UIKit
 /// - Parameters:
 ///   - rootView: The SwiftUI screen to host.
 ///   - title: Forwarded to `NavigationHeader`.
-///   - progress: Forwarded to `NavigationHeader`. `0` (the default) hides the progress bar.
+///   - current: Forwarded to `NavigationHeader`.
+///   - total: Forwarded to `NavigationHeader`. `0` (the default) hides the progress bar.
 ///
 /// Usage: `NavigationHostingController(rootView: QuestionaryView(viewModel: viewModel), title:
-/// "Question", progress: 1)`.
+/// "Question", current: 1, total: 5)`.
 final class NavigationHostingController<Content: View>: UIViewController {
     private let hostingController: UIHostingController<Content>
     private let headerTitle: String
-    private let headerProgress: Int
+    private let headerCurrent: Int
+    private let headerTotal: Int
 
-    init(rootView: Content, title: String, progress: Int = 0) {
+    init(rootView: Content, title: String, current: Int = 0, total: Int = 0) {
         self.hostingController = UIHostingController(rootView: rootView)
         self.headerTitle = title
-        self.headerProgress = progress
+        self.headerCurrent = current
+        self.headerTotal = total
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -46,7 +49,7 @@ final class NavigationHostingController<Content: View>: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         embedHostingController()
-        NavigationHeader.install(title: headerTitle, progress: headerProgress, on: self)
+        NavigationHeader.install(title: headerTitle, current: headerCurrent, total: headerTotal, on: self)
     }
 
     override func viewWillAppear(_ animated: Bool) {

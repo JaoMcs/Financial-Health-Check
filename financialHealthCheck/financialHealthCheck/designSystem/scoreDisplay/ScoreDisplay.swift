@@ -8,21 +8,25 @@
 import SwiftUI
 
 /// The design system's circular score ring (Figma): a 240x240 ring, filled clockwise from the
-/// top to reflect `score` out of 100, with the score and "/100" centered inside. Same
-/// `Circle().trim(from:to:).rotationEffect(-90°)` technique as the article cited in the
-/// README credits, adapted to a 0–100 score instead of a countdown.
+/// top to reflect `score` out of `maxScore`, with the score and "/`maxScore`" centered inside.
+/// Same `Circle().trim(from:to:).rotationEffect(-90°)` technique as the article cited in the
+/// README credits, adapted to a score out of `maxScore` instead of a countdown.
 ///
-/// - Parameter score: The value out of 100 to fill the ring to, and show in its center.
+/// - Parameters:
+///   - score: The value to fill the ring to, and show in its center.
+///   - maxScore: The value `score` is out of — shown as "/`maxScore`", and what `score` is
+///     divided by to compute the fill.
 ///
-/// Usage: `ScoreDisplay(score: 78)`.
+/// Usage: `ScoreDisplay(score: 78, maxScore: 100)`.
 struct ScoreDisplay: View {
     private static let size: CGFloat = 240
     private static let lineWidth: CGFloat = 24
 
     let score: Int
+    let maxScore: Int
 
     private var progress: CGFloat {
-        CGFloat(score) / 100
+        CGFloat(score) / CGFloat(maxScore)
     }
 
     var body: some View {
@@ -40,7 +44,7 @@ struct ScoreDisplay: View {
                     .typography(Typography.Heading.xl)
                     .foregroundStyle(DesignSystemColor.Text.primary)
 
-                Text("/100")
+                Text("/\(maxScore)")
                     .typography(Typography.Body.LG.medium)
                     .foregroundStyle(DesignSystemColor.Text.secondary)
             }
@@ -54,5 +58,5 @@ struct ScoreDisplay: View {
 }
 
 #Preview {
-    ScoreDisplay(score: 100)
+    ScoreDisplay(score: 78, maxScore: 100)
 }

@@ -39,5 +39,5 @@ struct StartView: View {
 }
 
 #Preview {
-    StartView(viewModel: StartViewModel())
+    StartView(viewModel: StartViewModel(repository: HealthCheckRepository(networkManager: NetworkManager())))
 }

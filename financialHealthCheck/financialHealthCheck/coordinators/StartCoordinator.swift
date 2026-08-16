@@ -11,17 +11,22 @@ import UIKit
 /// Shows the flow's intro screen (`StartView`). Just that for now — nothing to hand off to
 /// yet.
 ///
-/// - Parameter navigationController: The stack this flow shows its screen on.
+/// - Parameters:
+///   - navigationController: The stack this flow shows its screen on.
+///   - repository: Passed down to `StartViewModel`, and threaded into whatever this flow
+///     hands off to next.
 final class StartCoordinator: Coordinator {
     private let navigationController: UINavigationController
+    private let repository: HealthCheckRepositoring
     private var childCoordinators: [Coordinator] = []
 
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, repository: HealthCheckRepositoring) {
         self.navigationController = navigationController
+        self.repository = repository
     }
 
     func start() {
-        let viewModel = StartViewModel()
+        let viewModel = StartViewModel(repository: repository)
         configure(viewModel)
 
         let view = StartView(viewModel: viewModel)
@@ -32,13 +37,17 @@ final class StartCoordinator: Coordinator {
     ///
     /// - Parameter viewModel: The view model to configure.
     private func configure(_ viewModel: StartViewModel) {
-        viewModel.onStartTapped = { [weak self] in
-            self?.gotToQuestionView()
+        viewModel.onStartTapped = { [weak self] session in
+            self?.gotToQuestionView(session: session)
         }
     }
 
-    private func gotToQuestionView() {
-        let questionCoordinator = QuestionCoordinator(navigationController: navigationController)
+    private func gotToQuestionView(session: HealthCheckSessionDTO?) {
+        let questionCoordinator = QuestionCoordinator(
+            navigationController: navigationController,
+            repository: repository,
+            session: session
+        )
         childCoordinators.append(questionCoordinator)
         questionCoordinator.start()
     }

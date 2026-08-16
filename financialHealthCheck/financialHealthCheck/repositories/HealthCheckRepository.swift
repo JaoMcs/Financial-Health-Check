@@ -22,6 +22,9 @@ protocol HealthCheckRepositoring {
     ///
     /// - Parameter answer: The question being answered, and its value.
     func submitAnswer(_ answer: SubmitAnswerRequestDTO) async throws -> HealthCheckSessionDTO
+
+    /// Deletes the persisted session id, so the next `startSession()` starts a fresh one.
+    func deleteSession()
 }
 
 /// See `HealthCheckRepositoring`. The only thing that talks to `KeychainManager` — no other
@@ -67,5 +70,9 @@ final class HealthCheckRepository: HealthCheckRepositoring {
             method: .post,
             parameters: answer
         )
+    }
+
+    func deleteSession() {
+        KeychainManager.delete()
     }
 }

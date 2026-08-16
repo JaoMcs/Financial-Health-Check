@@ -39,20 +39,12 @@ protocol NetworkManaging {
 }
 
 /// See `NetworkManaging`. Every throw site here surfaces a `NetworkError` — callers never
-/// need to catch anything else. The API's JSON is `snake_case`; Swift code stays
-/// `camelCase` throughout, so `encoder`/`decoder` convert between the two.
+/// need to catch anything else. The API's JSON is already `camelCase` (`sessionId`,
+/// `questionId`, ...), matching Swift's own naming, so `encoder`/`decoder` use the default
+/// key strategy — no conversion needed.
 final class NetworkManager: NetworkManaging {
-    private let encoder: JSONEncoder = {
-        let encoder = JSONEncoder()
-        encoder.keyEncodingStrategy = .convertToSnakeCase
-        return encoder
-    }()
-
-    private let decoder: JSONDecoder = {
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        return decoder
-    }()
+    private let encoder = JSONEncoder()
+    private let decoder = JSONDecoder()
 
     func request<Response: Decodable>(
         endpoint: String,

@@ -11,17 +11,15 @@ import SwiftUI
 /// instead of an image — centered in the top half of the screen, an empty bottom half, and a
 /// `ButtonDock` pinned to the bottom edge.
 struct ResultView: View {
-    let score: Int
-    let title: String
-    let description: String
+    @ObservedObject var viewModel: ResultViewModel
 
     var body: some View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
                 ImageHeader(
-                    media: .score(score),
-                    title: title,
-                    description: description
+                    media: .score(value: viewModel.score, maxScore: Strings.Result.maxScore),
+                    title: viewModel.title,
+                    description: viewModel.description
                 )
                 .frame(height: geometry.size.height / 2)
 
@@ -31,7 +29,7 @@ struct ResultView: View {
                     primaryText: Strings.Result.primaryButtonTitle,
                     secondaryText: Strings.Result.secondaryButtonTitle,
                     primaryAction: {},
-                    secondaryAction: {},
+                    secondaryAction: { viewModel.retake()},
                     secondaryLeadingIcon: Icon.arrowReturn
                 )
                 .padding(.top, Spacing.lg)
@@ -41,5 +39,6 @@ struct ResultView: View {
 }
 
 #Preview {
-    ResultView(score: 78, title: "Solid ground", description: "Good habits, small gains still available.")
+    let repository = HealthCheckRepository(networkManager: NetworkManager())
+    ResultView(viewModel: ResultViewModel(repository: repository, result: nil))
 }
