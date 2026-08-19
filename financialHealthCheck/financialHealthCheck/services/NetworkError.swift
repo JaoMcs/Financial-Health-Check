@@ -37,3 +37,29 @@ enum NetworkError: Error {
     /// `URLSession` itself failed — no connectivity, timeout, a malformed URL, etc.
     case transport(Error)
 }
+
+extension NetworkError: Equatable {
+    /// Compares by case. `.transport`/`.decodingFailed` compare equal to each other
+    /// regardless of the wrapped `Error`'s own value, since `Error` itself isn't `Equatable`.
+    static func == (lhs: NetworkError, rhs: NetworkError) -> Bool {
+        switch (lhs, rhs) {
+        case (.invalidSessionId, .invalidSessionId),
+             (.invalidQuestion, .invalidQuestion),
+             (.questionNotFound, .questionNotFound),
+             (.sessionNotFound, .sessionNotFound),
+             (.sessionAlreadyCompleted, .sessionAlreadyCompleted),
+             (.rateLimited, .rateLimited),
+             (.methodNotAllowed, .methodNotAllowed),
+             (.invalidResponse, .invalidResponse),
+             (.transport, .transport),
+             (.decodingFailed, .decodingFailed):
+            return true
+        case let (.validationError(lField, lMessage), .validationError(rField, rMessage)):
+            return lField == rField && lMessage == rMessage
+        case let (.unrecognizedServerError(lStatus, lCode, lMessage), .unrecognizedServerError(rStatus, rCode, rMessage)):
+            return lStatus == rStatus && lCode == rCode && lMessage == rMessage
+        default:
+            return false
+        }
+    }
+}

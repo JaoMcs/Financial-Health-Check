@@ -14,7 +14,7 @@ import Foundation
 /// array of strings for `multiple_choice`, or a number for `number`.
 ///
 /// Usage: `SubmitAnswerRequestDTO(questionId: id, answer: .text("opt_1"))`.
-enum AnswerValue {
+enum AnswerValue: Equatable {
     /// `single_choice` — the selected option's id.
     case text(String)
     /// `multiple_choice` — the selected options' ids.

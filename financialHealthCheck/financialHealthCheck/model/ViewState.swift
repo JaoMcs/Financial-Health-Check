@@ -12,7 +12,7 @@ import Foundation
 ///
 /// Usage: `@Published var state: ViewState = .loading`, then `switch state { case .loading:
 /// ProgressView(); case .content: ...; case .error(let error): ... }`.
-enum ViewState {
+enum ViewState: Equatable {
     /// A request is in flight — nothing to render yet.
     case loading
     /// The request succeeded — the screen's data is ready to render.
