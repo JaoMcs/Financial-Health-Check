@@ -9,9 +9,15 @@ import Combine
 
 /// `ResultView`'s view model. Holds the `ResultDTO` the last `submitAnswer()` call resolved —
 /// this screen makes no request of its own (see `NETWORKING.md`).
+@MainActor
 final class ResultViewModel: ObservableObject {
     private let repository: HealthCheckRepositoring
     private let result: ResultDTO?
+
+    /// Drives which of `ResultView`'s content/`ErrorView` is shown. Always `.content` today —
+    /// this screen makes no request of its own to fail — kept for the same shape as
+    /// `StartViewModel`/`QuestionaryViewModel` in case that changes.
+    @Published var state: ViewState = .content
 
     var onFinishTapped: (() -> Void) = { }
 

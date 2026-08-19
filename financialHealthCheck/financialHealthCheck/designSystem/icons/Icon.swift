@@ -24,4 +24,7 @@ enum Icon {
     static let trendUp = Image("trend-up")
     static let mainImage = Image("mainImage")
     static let rightArrowIcon = Image("right-arrow-icon")
+    static let iconBackground = Image("iconBackground")
+    static let iconNoInternet = Image("iconNoInternet")
+    static let iconNoAvailable = Image("iconNoAvailable")
 }

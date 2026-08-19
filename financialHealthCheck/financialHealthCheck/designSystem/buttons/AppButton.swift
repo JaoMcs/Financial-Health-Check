@@ -48,27 +48,36 @@ struct AppButton: View {
     var trailingIcon: Image?
     /// Which of the app's three looks to render.
     let type: AppButtonType
+    /// Replaces the label with a spinner and disables the button — for an `action` that's
+    /// mid-flight (e.g. a network call before navigating to the next screen).
+    var isLoading: Bool = false
     /// Called when the button is tapped.
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 0) {
-                leadingIcon?
-                    .renderingMode(.template)
-                    .padding(.trailing, AppButtonMetrics.gap)
-                Text(text)
-                trailingIcon?
-                    .renderingMode(.template)
-                    .padding(.leading, AppButtonMetrics.gap)
+            if isLoading {
+                ProgressView()
+                    .tint(type.colors.foreground)
+            } else {
+                HStack(spacing: 0) {
+                    leadingIcon?
+                        .renderingMode(.template)
+                        .padding(.trailing, AppButtonMetrics.gap)
+                    Text(text)
+                    trailingIcon?
+                        .renderingMode(.template)
+                        .padding(.leading, AppButtonMetrics.gap)
+                }
             }
         }
         .buttonStyle(AppButtonStyle(colors: type.colors))
+        .disabled(isLoading)
     }
 }
 
-/// Every `AppButtonType`, enabled and disabled, with both icons to exercise the full layout
-/// and an overflowing label to confirm text truncates instead of wrapping.
+/// Every `AppButtonType`, enabled, disabled, and loading, with both icons to exercise the
+/// full layout and an overflowing label to confirm text truncates instead of wrapping.
 #Preview {
     let entries: [(text: String, type: AppButtonType)] = [
         ("Primary teste text big enough to overflow", .primary),
@@ -92,6 +101,14 @@ struct AppButton: View {
                 type: entry.type
             ) {}
             .disabled(true)
+
+            AppButton(
+                text: entry.text,
+                leadingIcon: Image(systemName: "star.fill"),
+                trailingIcon: Image(systemName: "arrow.right"),
+                type: entry.type,
+                isLoading: true
+            ) {}
         }
     }
     .padding(.horizontal, Spacing.twoXl)

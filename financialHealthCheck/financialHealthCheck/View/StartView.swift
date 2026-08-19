@@ -13,6 +13,15 @@ struct StartView: View {
     @ObservedObject var viewModel: StartViewModel
 
     var body: some View {
+        switch viewModel.state {
+        case .loading, .content:
+            contentView
+        case .error(let error):
+            ErrorView(error: error, action: viewModel.startTapped)
+        }
+    }
+
+    private var contentView: some View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
                 ImageHeader(
@@ -28,6 +37,7 @@ struct StartView: View {
                     text: Strings.Start.buttonTitle,
                     trailingIcon: Icon.rightArrowIcon,
                     type: .primary,
+                    isLoading: viewModel.state.isLoading,
                     action: viewModel.startTapped
                 )
                 .padding(.leading, Spacing.twoXl)

@@ -56,6 +56,64 @@ enum Strings {
         }
     }
 
+    /// Strings for `ErrorView`, shown in place of a screen's content when its ViewModel's
+    /// `state` is `.error`.
+    enum Error {
+        /// The headline shown for `kind`.
+        ///
+        /// - Parameter kind: The `ErrorViewKind` `ErrorView` mapped its `NetworkError` to.
+        static func title(for kind: ErrorViewKind) -> String {
+            switch kind {
+            case .offline:
+                return "We couldn't reach the server"
+            case .sessionLost:
+                return "This check is no longer available"
+            case .sessionCompleted:
+                return "This check is already complete"
+            case .rateLimited:
+                return "Too many attempts"
+            case .unexpected:
+                return "Something went wrong"
+            case .invalidAnswer:
+                return "We couldn't submit your answer"
+            }
+        }
+
+        /// The supporting copy shown for `kind`.
+        ///
+        /// - Parameter kind: The `ErrorViewKind` `ErrorView` mapped its `NetworkError` to.
+        static func description(for kind: ErrorViewKind) -> String {
+            switch kind {
+            case .offline:
+                return "Check your connection and try again. Your answers are saved on this device."
+            case .sessionLost:
+                return "We couldn't find your saved session on the server. Starting again takes about two minutes."
+            case .sessionCompleted:
+                return "You've already finished this health check. Start a new one to check again."
+            case .rateLimited:
+                return "You've made too many requests in a short time. Wait a moment and try again."
+            case .unexpected:
+                return "An unexpected error occurred. Try again in a moment."
+            case .invalidAnswer(let message):
+                return message ?? "Double-check your answer and try again."
+            }
+        }
+
+        /// The button label shown for `kind` — "Start a new check" when the session/flow
+        /// itself is gone and has to restart, "Try Again" for every other (transient/
+        /// server-side) failure.
+        ///
+        /// - Parameter kind: The `ErrorViewKind` `ErrorView` mapped its `NetworkError` to.
+        static func buttonTitle(for kind: ErrorViewKind) -> String {
+            switch kind {
+            case .sessionLost, .sessionCompleted:
+                return "Start a new check"
+            case .offline, .rateLimited, .unexpected, .invalidAnswer:
+                return "Try Again"
+            }
+        }
+    }
+
     /// Strings for the question screen (`QuestionaryView`). The question's own title,
     /// description, and options aren't here — they come from the API.
     enum Question {

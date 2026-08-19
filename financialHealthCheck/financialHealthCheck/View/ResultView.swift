@@ -14,6 +14,15 @@ struct ResultView: View {
     @ObservedObject var viewModel: ResultViewModel
 
     var body: some View {
+        switch viewModel.state {
+        case .loading, .content:
+            contentView
+        case .error(let error):
+            ErrorView(error: error, action: {})
+        }
+    }
+
+    private var contentView: some View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
                 ImageHeader(

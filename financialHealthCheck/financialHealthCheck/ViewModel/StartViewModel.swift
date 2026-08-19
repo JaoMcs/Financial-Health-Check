@@ -8,11 +8,15 @@
 import Combine
 
 /// `StartView`'s view model.
+@MainActor
 final class StartViewModel: ObservableObject {
     private let repository: HealthCheckRepositoring
 
     // TODO: - documentar dps
     @Published var session: HealthCheckSessionDTO?
+
+    /// Drives which of `StartView`'s content/`ErrorView` is shown.
+    @Published var state: ViewState = .content
 
     /// Called when the user taps "Start", with the session `startSession()` resolved. Set by
     /// `StartCoordinator` — empty for now.
@@ -23,17 +27,19 @@ final class StartViewModel: ObservableObject {
     }
 
     func startTapped() {
+        state = .loading
         Task {
             await startSession()
-            onStartTapped(session)
         }
     }
 
     func startSession() async {
         do {
             session = try await repository.startSession()
+            state = .content
+            onStartTapped(session)
         } catch {
-            // TODO: - Tratamento de erro
+            state = .error(error as? NetworkError ?? .unrecognizedServerError(statusCode: 0, code: nil, message: nil))
         }
     }
 }

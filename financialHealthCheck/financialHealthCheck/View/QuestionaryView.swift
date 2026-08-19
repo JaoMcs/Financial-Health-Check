@@ -24,6 +24,15 @@ struct QuestionaryView: View {
     @ObservedObject var viewModel: QuestionaryViewModel
 
     var body: some View {
+        switch viewModel.state {
+        case .loading, .content:
+            contentView
+        case .error(let error):
+            ErrorView(error: error, action: viewModel.continueTapped)
+        }
+    }
+
+    private var contentView: some View {
         VStack(spacing: 0) {
             ScreenHeader(
                 caption: nil,
@@ -33,7 +42,7 @@ struct QuestionaryView: View {
             .padding(.top, Spacing.twoXl)
             .padding(.bottom, Spacing.twoXl)
 
-            contentView
+            selectionView
                 .padding(.horizontal, Spacing.twoXl)
 
             Spacer()
@@ -41,15 +50,19 @@ struct QuestionaryView: View {
             AppButton(
                 text: Strings.Question.continueButtonTitle,
                 type: .primary,
+                isLoading: viewModel.state.isLoading,
                 action: viewModel.continueTapped
             )
-            .disabled(!viewModel.isAnswerSelected)
+            .disabled(viewModel.state.isLoading ||
+                      !viewModel.isAnswerSelected ||
+                      viewModel.isNumberInvalid ||
+                      viewModel.isMultipleSelectionInvalid)
             .padding(.horizontal, Spacing.twoXl)
         }
     }
 
     @ViewBuilder
-    private var contentView: some View {
+    private var selectionView: some View {
         switch viewModel.content {
         case .singleChoice(let options):
             RadioButtonList(selection: $viewModel.singleSelection, options: options)
@@ -57,7 +70,7 @@ struct QuestionaryView: View {
             CheckboxList(
                 selections: Binding(
                     get: { Set(viewModel.multipleSelections) },
-                    set: { viewModel.multipleSelections = Array($0) }
+                    set: { viewModel.updateMultipleSelections($0) }
                 ),
                 options: options
             )

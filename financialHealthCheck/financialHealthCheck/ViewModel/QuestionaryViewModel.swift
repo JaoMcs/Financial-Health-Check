@@ -8,6 +8,7 @@
 import Combine
 
 /// `QuestionaryView`'s view model.
+@MainActor
 final class QuestionaryViewModel: ObservableObject {
     private let repository: HealthCheckRepositoring
     private let session: HealthCheckSessionDTO?
@@ -20,6 +21,9 @@ final class QuestionaryViewModel: ObservableObject {
     @Published var multipleSelections: [String] = []
     /// The entered value, for `.number`. Bound to `AppTextField`.
     @Published var numberText = ""
+
+    /// Drives which of `QuestionaryView`'s content/`ErrorView` is shown.
+    @Published var state: ViewState = .content
 
     /// The session `submitAnswer()` resolved, once it returns.
     @Published private(set) var nextSession: HealthCheckSessionDTO?
@@ -71,24 +75,48 @@ final class QuestionaryViewModel: ObservableObject {
         )
     }
 
-
-
-    // TODO: - corrigir essa função (esquisitona)
     /// Whether `numberText` is non-empty but isn't a whole number within
     /// `validation.min`/`max`.
     var isNumberInvalid: Bool {
         guard !numberText.isEmpty else { return false }
+        guard let value = Int(numberText) else { return true }
 
         let min = session?.question?.validation?.min ?? 0
         let max = session?.question?.validation?.max ?? 0
+        return value <= min || value >= max
+    }
 
-        guard let value = Int(numberText), value >= min, value <= max else {
+    /// Whether `multipleSelections` is non-empty but its count falls outside
+    /// `validation.minSelections`/`maxSelections`.
+    var isMultipleSelectionInvalid: Bool {
+        guard !multipleSelections.isEmpty else { return false }
+
+        let count = multipleSelections.count
+        if let min = session?.question?.validation?.minSelections, count < min {
+            return true
+        }
+        if let max = session?.question?.validation?.maxSelections, count > max {
             return true
         }
         return false
     }
 
+    /// Applies `newSelections` from `CheckboxList`, ignoring it if it would check an option
+    /// past `validation.maxSelections` — unlike `minSelections`, which can only be enforced
+    /// once the user tries to continue, a maximum can be enforced right at selection time.
+    ///
+    /// - Parameter newSelections: The full selection set `CheckboxList` just produced.
+    func updateMultipleSelections(_ newSelections: Set<String>) {
+        if let max = session?.question?.validation?.maxSelections,
+           newSelections.count > multipleSelections.count,
+           newSelections.count > max {
+            return
+        }
+        multipleSelections = Array(newSelections)
+    }
+
     func continueTapped() {
+        state = .loading
         Task {
             await submitAnswer()
         }
@@ -100,20 +128,16 @@ final class QuestionaryViewModel: ObservableObject {
         do {
             let request = SubmitAnswerRequestDTO(questionId: session?.question?.id, answer: answer)
             nextSession = try await repository.submitAnswer(request)
+            state = .content
             if nextSession?.status == "completed" {
                 onResultTapped(nextSession?.result)
             } else {
                 onContinueTapped(nextSession)
             }
         } catch {
-            // TODO: - Tratamento de erro
-            print("erro")
+            state = .error(error as? NetworkError ?? .unrecognizedServerError(statusCode: 0, code: nil, message: nil))
         }
     }
-// Usar em algum momento pra setar o erro no multipla escolha ou pelo menos lockar o botão
-//    minSelections?: number   // multiple_choice
-//    maxSelections?: number   // multiple_choice
-
 
     /// Maps the user's current selection to the shape the API expects — `nil` if nothing's
     /// been selected/entered yet.
