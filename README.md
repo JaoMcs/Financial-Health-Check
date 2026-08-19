@@ -19,6 +19,16 @@ client-side script:
 The app persists the in-progress session's id locally (Keychain), so relaunching mid-flow
 resumes exactly where the user left off instead of restarting.
 
+## How to Run
+
+1. Open `financialHealthCheck/financialHealthCheck.xcodeproj` in Xcode (iOS 26.5+ SDK, Swift 5).
+2. Select the `financialHealthCheck` scheme and run on a simulator or device — no signing/
+   environment setup needed.
+3. The API base URL is read from `Info.plist` (`API_BASE_URL`), already pointing at
+   `https://api.peakers.workers.dev`, so the app runs against the live spec out of the box.
+4. To run the unit tests: `Cmd+U` in Xcode, or `xcodebuild test` on the
+   `financialHealthCheckTests` target.
+
 ## Design Resources
 
 - **[Figma — Design System](https://www.figma.com/design/ztqxSwQ9AkH2HKyADYnw68/iOS-Assignment-Design-System-v3?node-id=0-1&p=f&t=HdinADG2WpTggoVH-0)**
@@ -46,6 +56,60 @@ The app follows **MVVM-C** (Model, View, ViewModel, Coordinator):
 Dependency injection is plain constructor injection, no framework: `AppCoordinator` creates a
 single `HealthCheckRepository` and threads it down through every child Coordinator's
 initializer, which in turn passes it into the ViewModel it creates.
+
+### Key Decisions
+
+- **MVVM-C over MVVM alone** — every ViewModel holds 100% of the screen's decision logic, so
+  Views stay dumb (render-only) and Coordinators stay navigation-only. That split is also what
+  makes the ViewModels unit-testable in isolation (see `financialHealthCheckTests`).
+- **Session id in Keychain, not `UserDefaults`** — the assignment requires the session to
+  survive a force quit; Keychain is the standard place for something that identifies a user's
+  in-progress state and needs to persist reliably across launches.
+- **One shared `HealthCheckSessionDTO` shape for both endpoints** — start/resume and submit both
+  return `{ status, question?, result?, progress }`, so one model and one decode path handles
+  "what happens next," instead of two parallel response types.
+- **`NetworkManager` is fully generic** — it knows nothing about the health-check domain;
+  `HealthCheckRepository` is the only layer with domain-named operations
+  (`startSession()`, `submitAnswer(_:)`). This keeps ViewModels unaware they're talking to a
+  network at all, and keeps the transport layer reusable if the app grows more endpoints.
+
+## Assumptions & Trade-offs
+
+Given the assignment's scope, a few things were deliberately left as open edges rather than
+fully hardened, and are called out here instead of being silently shipped:
+
+- **No re-entrancy guard on "Start"/"Continue"/"Retake"** — none of the three ViewModels expose
+  an `isLoading` state yet, so a fast double-tap (or a tap during network latency) can fire the
+  same request twice. Traded off against the scope of a take-home assignment; a real app would
+  need this.
+- **Back button during the question flow isn't disabled** — the user can navigate back to an
+  already-answered question. The API doesn't allow re-answering a completed question, so
+  resubmitting currently fails silently instead of surfacing an error or locking the screen.
+- **"Finish" on the Result screen has no defined behavior** — unlike "Retake" (clears the
+  session, returns to Start), there's no product spec for what completing the flow for good
+  should do, so it's currently a no-op.
+- **A transient network failure at launch is treated the same as "no session"** — both fall
+  back to the Start screen. A `sessionNotFound` response also doesn't clear the stale session id
+  from the Keychain, so a dead id would keep failing the same way on every relaunch.
+- **`.number` questions are assumed to always be currency** — the API doesn't send a unit/format
+  hint per question, so the text field hardcodes a `€` prefix. This holds for every question
+  seen so far, but isn't guaranteed by the spec.
+- **`minSelections`/`maxSelections` are decoded but not enforced** — `.multipleChoice` only
+  requires "something is selected" to continue, not that the count falls within the range the
+  API sends.
+
+## Significant Libraries/Dependencies
+
+**None.** The app is built entirely on first-party frameworks — SwiftUI, Combine (every
+ViewModel is an `ObservableObject`), `URLSession` (via `NetworkManager`), and Keychain Services
+(via `KeychainManager`). For this assignment's scope (two endpoints, no image loading, no
+complex retry/caching needs), a third-party networking library would have added a dependency
+with no real capability gap to fill. The only external tool is **SwiftLint**, dev-only (not
+linked into the app), configured via `financialHealthCheck/.swiftlint.yml`.
+
+## Time Spent
+
+~20 hours over one week — roughly 5h+ per day on weekend days, ~2h per day on weekdays.
 
 ## Project Structure
 
