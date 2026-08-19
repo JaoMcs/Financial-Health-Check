@@ -5,6 +5,7 @@
 //  Created by Joao on 15/08/26.
 //
 
+import SwiftUI
 import UIKit
 
 /// Where `AppCoordinator` routes to once it's resolved the current session state.
@@ -59,6 +60,10 @@ final class AppCoordinator: Coordinator {
     /// setting a root (no back button), so this is enough on its own; no coordinator needs to
     /// know whether it's first.
     private func route() async {
+        if repository.hasExistingSession() {
+            showRestoringSession()
+        }
+
         let destination: SplashDestination
         do {
             destination = try await resolveDestination()
@@ -66,6 +71,7 @@ final class AppCoordinator: Coordinator {
             destination = .start
         }
 
+        // Just to avoid the back button during a runing session
         navigationController.setViewControllers([], animated: false)
 
         switch destination {
@@ -95,15 +101,23 @@ final class AppCoordinator: Coordinator {
         }
     }
 
+    /// Replaces the splash screen with `RestoringSessionView` while `resolveDestination()`
+    /// asks the server where the persisted session left off — called only when a session id
+    /// is already there to resume, so this never shows for a first-time launch.
+    private func showRestoringSession() {
+        let restoringViewController = UIHostingController(rootView: RestoringSessionView())
+        navigationController.setViewControllers([restoringViewController], animated: true)
+    }
+
     private func resolveDestination() async throws -> SplashDestination {
         guard repository.hasExistingSession() else { return .start }
 
         let session = try await repository.startSession()
 
-        if session.status == "completed",
+        if session.status == Strings.SessionStatus.completed,
             let result = session.result {
             return .result(result)
-        } else if session.status == "in_progress" {
+        } else if session.status == Strings.SessionStatus.inProgress {
             return .question(session)
         } else {
             throw NetworkError.invalidResponse

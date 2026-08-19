@@ -10,10 +10,19 @@ import Foundation
 /// Every user-facing string in the app, grouped by screen, so no screen hardcodes text
 /// directly.
 enum Strings {
+    /// `HealthCheckSessionDTO.status`'s two raw values — not user-facing text, but the API's
+    /// own contract strings. Centralized here (`AppCoordinator`/`QuestionaryViewModel` compare
+    /// against these instead of repeating the literals) rather than modeled as a `Codable`
+    /// enum, to keep `status`'s decoding exactly as lenient as before.
+    enum SessionStatus {
+        static let inProgress = "in_progress"
+        static let completed = "completed"
+    }
+
     /// Strings for the intro screen (`StartView`).
     enum Start {
         static let title = "How healthy are your finances?"
-        static let description = "5 questions, 2 minutes."
+        static let description = "\(AppConfig.defaultQuestionCount) questions, 2 minutes."
         static let buttonTitle = "Start"
     }
 
@@ -112,6 +121,13 @@ enum Strings {
                 return "Try Again"
             }
         }
+    }
+
+    /// Strings for `RestoringSessionView`, shown right after splash while a persisted session
+    /// is being resumed.
+    enum RestoringSession {
+        static let title = "Picking up where you left off"
+        static let description = "Restoring your answers from this device."
     }
 
     /// Strings for the question screen (`QuestionaryView`). The question's own title,

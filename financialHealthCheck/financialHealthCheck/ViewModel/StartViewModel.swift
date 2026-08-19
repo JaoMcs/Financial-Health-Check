@@ -12,7 +12,6 @@ import Combine
 final class StartViewModel: ObservableObject {
     private let repository: HealthCheckRepositoring
 
-    // TODO: - documentar dps
     @Published var session: HealthCheckSessionDTO?
 
     /// Drives which of `StartView`'s content/`ErrorView` is shown.

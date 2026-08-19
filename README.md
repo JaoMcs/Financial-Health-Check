@@ -38,10 +38,14 @@ resumes exactly where the user left off instead of restarting.
   — the app's screen-to-screen navigation flow, mirrored by the Coordinator tree.
 - **[Miro — Data Modeling](https://miro.com/app/board/uXjVHynVQDI=/)**
   — the modeling behind the `model/` DTOs and the API's request/response shapes.
+- **[Trello — Task Board](https://trello.com/invite/b/6a7b98698efd5bf9bb675f41/ATTI61ca57773a93b3033330d2b7f98de2b89E28D277/tecnical-test-ios)**
+  — task tracking for this assignment.
 
-<!-- Screenshots to be added here. -->
+![Paper prototype — the question flow's five states (single choice, multiple choice, and number with/without a validation error)](docs/screenshots/paper-1.png)
 
-## Architecture
+## High-Level Design
+
+![High-level architecture diagram — the Coordinator hierarchy, each screen's ViewModel, and how Repository delegates to KeychainManager/NetworkManager](docs/screenshots/high-level-design.png)
 
 The app follows **MVVM-C** (Model, View, ViewModel, Coordinator):
 
@@ -106,10 +110,6 @@ ViewModel is an `ObservableObject`), `URLSession` (via `NetworkManager`), and Ke
 complex retry/caching needs), a third-party networking library would have added a dependency
 with no real capability gap to fill. The only external tool is **SwiftLint**, dev-only (not
 linked into the app), configured via `financialHealthCheck/.swiftlint.yml`.
-
-## Time Spent
-
-~20 hours over one week — roughly 5h+ per day on weekend days, ~2h per day on weekdays.
 
 ## Project Structure
 
@@ -213,3 +213,16 @@ or the final result):
 ## Credits
 
 - [SwiftUI: Create a Custom Progress Bar](https://medium.com/@simply_stef/swiftui-create-a-custom-progress-bar-8d119aa78d45) by Stef — reference for the `ScoreDisplay` circular progress component.
+
+## Task Organization & Time Spent
+
+![Trello board — task tracking for this assignment, from Backlog through Concluído](docs/screenshots/trello-tasks.png)
+
+Tasks were tracked on the Trello board linked above (each card's Motivation/Proposal/Helper
+links are in `docs/trello-cards.md`). The cards themselves are written in a simplified,
+single-glance way — not detailed specs — but they were what actually kept the project on
+track: a quick checkpoint of what was already done, what was next, and what was still open, so
+development never drifted or got lost along the way.
+
+**Time spent:** ~20 hours over one week — roughly 5h+ per day on weekend days, ~2h per day on
+weekdays.

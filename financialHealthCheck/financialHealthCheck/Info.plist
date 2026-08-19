@@ -4,6 +4,8 @@
 <dict>
 	<key>API_BASE_URL</key>
 	<string>https://api.peakers.workers.dev</string>
+	<key>DEFAULT_QUESTION_COUNT</key>
+	<integer>5</integer>
 	<key>UIDesignRequiresCompatibility</key>
 	<true/>
 	<key>UIViewControllerBasedStatusBarAppearance</key>

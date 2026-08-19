@@ -76,14 +76,14 @@ final class QuestionaryViewModel: ObservableObject {
     }
 
     /// Whether `numberText` is non-empty but isn't a whole number within
-    /// `validation.min`/`max`.
+    /// `validation.min`/`max` — `min`/`max` themselves are allowed values.
     var isNumberInvalid: Bool {
         guard !numberText.isEmpty else { return false }
         guard let value = Int(numberText) else { return true }
 
         let min = session?.question?.validation?.min ?? 0
         let max = session?.question?.validation?.max ?? 0
-        return value <= min || value >= max
+        return value < min || value > max
     }
 
     /// Whether `multipleSelections` is non-empty but its count falls outside
@@ -129,7 +129,7 @@ final class QuestionaryViewModel: ObservableObject {
             let request = SubmitAnswerRequestDTO(questionId: session?.question?.id, answer: answer)
             nextSession = try await repository.submitAnswer(request)
             state = .content
-            if nextSession?.status == "completed" {
+            if nextSession?.status == Strings.SessionStatus.completed {
                 onResultTapped(nextSession?.result)
             } else {
                 onContinueTapped(nextSession)

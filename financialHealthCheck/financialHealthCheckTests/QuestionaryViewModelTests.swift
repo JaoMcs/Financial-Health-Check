@@ -145,18 +145,34 @@ final class QuestionaryViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.isNumberInvalid)
     }
 
-    func testIsNumberInvalid_whenValueEqualsMin_returnsTrue() {
+    func testIsNumberInvalid_whenValueEqualsMin_returnsFalse() {
         let session = Fixtures.session(question: Fixtures.numberQuestion(min: 0, max: 10))
         let viewModel = QuestionaryViewModel(repository: MockHealthCheckRepository(), session: session)
         viewModel.numberText = "0"
 
-        XCTAssertTrue(viewModel.isNumberInvalid)
+        XCTAssertFalse(viewModel.isNumberInvalid)
     }
 
-    func testIsNumberInvalid_whenValueEqualsMax_returnsTrue() {
+    func testIsNumberInvalid_whenValueEqualsMax_returnsFalse() {
         let session = Fixtures.session(question: Fixtures.numberQuestion(min: 0, max: 10))
         let viewModel = QuestionaryViewModel(repository: MockHealthCheckRepository(), session: session)
         viewModel.numberText = "10"
+
+        XCTAssertFalse(viewModel.isNumberInvalid)
+    }
+
+    func testIsNumberInvalid_whenValueIsBelowMin_returnsTrue() {
+        let session = Fixtures.session(question: Fixtures.numberQuestion(min: 0, max: 10))
+        let viewModel = QuestionaryViewModel(repository: MockHealthCheckRepository(), session: session)
+        viewModel.numberText = "-1"
+
+        XCTAssertTrue(viewModel.isNumberInvalid)
+    }
+
+    func testIsNumberInvalid_whenValueIsAboveMax_returnsTrue() {
+        let session = Fixtures.session(question: Fixtures.numberQuestion(min: 0, max: 10))
+        let viewModel = QuestionaryViewModel(repository: MockHealthCheckRepository(), session: session)
+        viewModel.numberText = "11"
 
         XCTAssertTrue(viewModel.isNumberInvalid)
     }

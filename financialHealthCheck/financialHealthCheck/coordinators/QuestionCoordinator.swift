@@ -37,7 +37,7 @@ final class QuestionCoordinator: Coordinator {
         let view = QuestionaryView(viewModel: viewModel)
 
         let current = session?.progress?.current ?? 1
-        let total = session?.progress?.total ?? 5
+        let total = session?.progress?.total ?? AppConfig.defaultQuestionCount
         let hostingController = NavigationHostingController(
             rootView: view,
             title: Strings.Question.navigationTitle(current: current, total: total),
