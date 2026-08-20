@@ -218,10 +218,6 @@ or the final result):
 - `POST /health-check/v1/sessions/{sessionId}/submission` — submit the current question's
   answer; the response already contains what comes next.
 
-## Credits
-
-- [SwiftUI: Create a Custom Progress Bar](https://medium.com/@simply_stef/swiftui-create-a-custom-progress-bar-8d119aa78d45) by Stef — reference for the `ScoreDisplay` circular progress component.
-
 ## Task Organization & Time Spent
 
 ![Trello board — task tracking for this assignment, from Backlog through Concluído](docs/screenshots/trello-tasks.png)
@@ -239,9 +235,20 @@ development never drifted or got lost along the way.
 | Wednesday | Aug 12 | ~1h | Initial planning — setting up the Trello task board. |
 | Thursday | Aug 13 | ~2h | Thinking through the app's architecture and module breakdown, then starting on it. |
 | Friday | Aug 14 | ~1.5h | Started the design system. |
-| Saturday–Sunday | Aug 15–16 | ~5h | Building out the design system. |
+| Saturday–Sunday | Aug 15–16 | ~6h | Building out the design system. |
 | Monday | Aug 17 | ~2.5h | Finished the design system, moved on to the app's actual functionality. |
 | Tuesday | Aug 18 | — | Day off. |
 | Wednesday | Aug 19 | ~1h | Functionality. |
 | Thursday | Aug 20 | ~2.5h | Polishing the functionality and closing out the open points still remaining. |
 | **Total** | | **~15.5h** | |
+
+## Credits
+
+- [SwiftUI: Create a Custom Progress Bar](https://medium.com/@simply_stef/swiftui-create-a-custom-progress-bar-8d119aa78d45) by Stef — reference for the `ScoreDisplay` circular progress component.
+- [The Definitive Guide to ViewState in SwiftUI](https://medium.com/the-swift-cooperative/the-definitive-guide-to-viewstate-in-swiftui-9923afeb5455) — reference for the `ViewState` enum (`model/ViewState.swift`) driving each screen's loading/content/error rendering.
+- [Coordinator Pattern in SwiftUI: Keeping Navigation Logic Out of Your Views](https://levelup.gitconnected.com/coordinator-pattern-in-swiftui-keeping-navigation-logic-out-of-your-views-48c2fd8e35ab) — reference for the Coordinator tree (`coordinators/`).
+- [How to Use SwiftUI Coordinators](https://medium.com/@michaelmavris/how-to-use-swiftui-coordinators-1011ca881eef) by Michael Mavris — reference for the Coordinator tree (`coordinators/`).
+- [Swift: Writing a Generic HTTP Request](https://stackoverflow.com/questions/59777612/swift-writing-a-generic-http-request) — reference for `NetworkManager`'s generic `request<Response: Decodable>(...)` method.
+- [Designing a Swift Network Layer You Won't Regret](https://medium.com/@dilshodzopirov/designing-a-swift-network-layer-you-wont-regret-0c1b24ec6788) by Dilshod Zopirov — reference for splitting `NetworkManager` (transport) from `HealthCheckRepository` (domain), per `NETWORKING.md`.
+- [Custom Navigation Bar in SwiftUI](https://medium.com/@alessandromanilii/custom-navigation-bar-in-swiftui-f8a9ef0ac168) by Alessandro Manilii — reference for `NavigationHeader`/`NavigationHostingController`.
+- [Custom Back Button in Navigation in iOS](https://stackoverflow.com/questions/60500508/custom-back-button-in-navigation-in-ios) — reference for `NavigationHeader.styleBackButton`.
