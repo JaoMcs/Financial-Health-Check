@@ -7,10 +7,8 @@
 
 import Foundation
 
-/// A flow's entry point and navigation owner (MVVM-C, per `CLAUDE.md`). Each screen's
-/// View/ViewModel pair belongs to exactly one `Coordinator`, responsible for pushing it and
-/// creating/starting whatever comes next.
+/// A flow's entry point and navigation owner (MVVM-C, per `CLAUDE.md`).
 protocol Coordinator: AnyObject {
-    /// Begins this flow — pushes its first screen, or hands off to a child coordinator.
+    /// Begins this flow.
     func start()
 }

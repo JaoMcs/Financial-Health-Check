@@ -7,8 +7,5 @@
 
 import Foundation
 
-/// Marker protocol for the API's Data Transfer Objects.
-///
-/// Conforming to `DTO` means a type is `Codable` and represents the exact JSON shape
-/// exchanged with the `health-check` API, as opposed to a type used only inside the app.
+/// Marker protocol for `Codable` types representing the API's exact JSON shapes.
 protocol DTO: Codable {}

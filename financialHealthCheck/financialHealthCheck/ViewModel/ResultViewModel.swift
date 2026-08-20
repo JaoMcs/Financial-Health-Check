@@ -7,22 +7,19 @@
 
 import Combine
 
-/// `ResultView`'s view model. Holds the `ResultDTO` the last `submitAnswer()` call resolved —
-/// this screen makes no request of its own (see `NETWORKING.md`).
+/// `ResultView`'s view model. Holds the `ResultDTO` the last `submitAnswer()` call resolved.
 @MainActor
 final class ResultViewModel: ObservableObject {
     // MARK: - Dependencies
     private let repository: HealthCheckRepositoring
     private let result: ResultDTO?
 
-    /// Drives which of `ResultView`'s content/`ErrorView` is shown. Always `.content` today —
-    /// this screen makes no request of its own to fail — kept for the same shape as
-    /// `StartViewModel`/`QuestionaryViewModel` in case that changes.
+    /// Drives which of `ResultView`'s content/`ErrorView` is shown. Always `.content` today.
     @Published var state: ViewState = .content
 
     /// Called when the user taps "Finish". Set by `ResultCoordinator` — empty for now.
     var onFinishTapped: (() -> Void) = { }
-    /// Called when the user taps "Retake", after `retake()` has already deleted the session.
+    /// Called when the user taps "Retake", after the session has already been deleted.
     var onRetakeTapped: (() -> Void) = { }
 
     init(repository: HealthCheckRepositoring, result: ResultDTO?) {

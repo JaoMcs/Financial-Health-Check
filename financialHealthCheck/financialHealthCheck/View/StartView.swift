@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-/// The flow's intro screen (Figma): an `ImageHeader` centered in the top half of the screen,
-/// an empty bottom half, and a "Start" button pinned to the bottom edge.
+/// The flow's intro screen: an `ImageHeader` up top and a "Start" button pinned to the bottom
+/// edge.
 struct StartView: View {
     @ObservedObject var viewModel: StartViewModel
 

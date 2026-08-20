@@ -30,13 +30,12 @@ final class QuestionaryViewModel: ObservableObject {
     /// The session `submitAnswer()` resolved, once it returns.
     @Published private var nextSession: HealthCheckSessionDTO?
 
-    /// Called when the user taps "Continue", with the session `submitAnswer()` resolved. Set
+    /// Called when the user taps "Continue", with the resolved session.
     var onContinueTapped: ((HealthCheckSessionDTO?) -> Void) = { _ in }
 
     var onResultTapped: ((ResultDTO?) -> Void) = { _ in }
 
-    /// Called after `resetSession()` clears the persisted session. Set by `QuestionCoordinator`
-    /// — empty for now.
+    /// Called after `resetSession()` clears the persisted session.
     var onSessionReset: (() -> Void) = { }
 
     var title: String {
@@ -92,9 +91,7 @@ final class QuestionaryViewModel: ObservableObject {
     }
 
     /// `numberText` parsed as a `Double`, accepting `,` as well as `.` for the decimal
-    /// separator — `.decimalPad`'s separator key inserts whatever the device's locale uses
-    /// (`,` in pt-BR), which `Double.init?(String:)` only recognizes as `.`, regardless of
-    /// locale.
+    /// separator.
     private var numberValue: Double? {
         Double(numberText.replacingOccurrences(of: ",", with: "."))
     }
@@ -120,9 +117,8 @@ final class QuestionaryViewModel: ObservableObject {
         state.isLoading || !isAnswerSelected || isNumberInvalid || isMultipleSelectionInvalid
     }
 
-    /// Applies `newSelections` from `CheckboxList`, ignoring it if it would check an option
-    /// past `validation.maxSelections` — unlike `minSelections`, which can only be enforced
-    /// once the user tries to continue, a maximum can be enforced right at selection time.
+    /// Applies `newSelections` from `CheckboxList`, ignoring it if it would exceed
+    /// `validation.maxSelections`.
     ///
     /// - Parameter newSelections: The full selection set `CheckboxList` just produced.
     func updateMultipleSelections(_ newSelections: Set<String>) {
@@ -158,9 +154,8 @@ final class QuestionaryViewModel: ObservableObject {
         }
     }
 
-    /// Called when the user taps "Start a new check" on an error that means this session can't
-    /// continue (`ErrorViewKind.requiresSessionReset`) — clears the persisted session and hands
-    /// off to `onSessionReset`, mirroring `ResultViewModel.retake()`.
+    /// Called when the user taps "Start a new check" on a session-reset error — clears the
+    /// persisted session and calls `onSessionReset`.
     func resetSession() {
         repository.deleteSession()
         onSessionReset()

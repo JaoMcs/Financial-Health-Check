@@ -18,7 +18,7 @@ final class StartViewModel: ObservableObject {
     /// Drives which of `StartView`'s content/`ErrorView` is shown.
     @Published var state: ViewState = .content
 
-    /// Called when the user taps "Start", with the session `startSession()` resolved. Set by
+    /// Called when the user taps "Start", with the resolved session.
     var onStartTapped: ((HealthCheckSessionDTO?) -> Void) = { _ in }
 
     init(repository: HealthCheckRepositoring) {

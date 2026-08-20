@@ -8,9 +8,6 @@
 import Foundation
 
 /// Constraints an answer must satisfy before it can be submitted for a given question.
-///
-/// Usage: read from `QuestionDTO.validation` and check it against the user's in-progress
-/// answer before enabling the submit action.
 struct QuestionValidationDTO: DTO {
     /// Whether an answer must be provided at all.
     var required: Bool?

@@ -8,8 +8,6 @@
 import SwiftUI
 
 /// Layout values for `ScoreDisplay` (Figma).
-///
-/// Usage: `.frame(width: ScoreDisplayConstants.size, height: ScoreDisplayConstants.size)`.
 enum ScoreDisplayConstants {
     /// Width and height of the ring.
     static let size: CGFloat = 240
@@ -17,17 +15,12 @@ enum ScoreDisplayConstants {
     static let lineWidth: CGFloat = 24
 }
 
-/// The design system's circular score ring (Figma): a 240x240 ring, filled clockwise from the
-/// top to reflect `score` out of `maxScore`, with the score and "/`maxScore`" centered inside.
-/// Same `Circle().trim(from:to:).rotationEffect(-90°)` technique as the article cited in the
-/// README credits, adapted to a score out of `maxScore` instead of a countdown.
+/// The design system's circular score ring (Figma): a ring filled clockwise to reflect `score`
+/// out of `maxScore`, with both values centered inside.
 ///
 /// - Parameters:
 ///   - score: The value to fill the ring to, and show in its center.
-///   - maxScore: The value `score` is out of — shown as "/`maxScore`", and what `score` is
-///     divided by to compute the fill.
-///
-/// Usage: `ScoreDisplay(score: 78, maxScore: 100)`.
+///   - maxScore: The value `score` is out of.
 struct ScoreDisplay: View {
     let score: Int
     let maxScore: Int

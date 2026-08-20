@@ -10,10 +10,8 @@ import Foundation
 /// Every user-facing string in the app, grouped by screen, so no screen hardcodes text
 /// directly.
 enum Strings {
-    /// `HealthCheckSessionDTO.status`'s two raw values — not user-facing text, but the API's
-    /// own contract strings. Centralized here (`AppCoordinator`/`QuestionaryViewModel` compare
-    /// against these instead of repeating the literals) rather than modeled as a `Codable`
-    /// enum, to keep `status`'s decoding exactly as lenient as before.
+    /// `HealthCheckSessionDTO.status`'s two raw values — the API's contract strings, not
+    /// user-facing text.
     enum SessionStatus {
         static let inProgress = "in_progress"
         static let completed = "completed"

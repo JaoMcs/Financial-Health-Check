@@ -8,8 +8,6 @@
 import SwiftUI
 
 /// Layout values shared by every `RadioButtonListItem` state (Figma).
-///
-/// Usage: `.padding(.leading, RadioButtonListItemConstants.edgePadding)`.
 enum RadioButtonListItemConstants {
     /// Corner radius of the item's background/border.
     static let cornerRadius: CGFloat = 16
@@ -24,19 +22,8 @@ enum RadioButtonListItemConstants {
 }
 
 /// The design system's single radio list item component (Figma): a rounded, tappable row
-/// with a radio icon and a label.
-///
-/// - **Selected**: `Status.selectedSubtle` background, `Status.selected` border at 2pt,
-///   `Icon.radioSelected`.
-/// - **Unselected**: `Surface` (white) background, light `Border` at 1pt,
-///   `Icon.radioNotSelected`.
-///
-/// The label's color doesn't change between states — only the background, border, and icon
-/// do. The icon carries its own padding rather than sharing the row's: 20pt on its top,
-/// leading, and bottom, and 12pt on its trailing edge (the gap to the label) — the row then
-/// adds its own 20pt trailing padding to match the icon's leading inset.
-///
-/// Usage: see the `#Preview` below.
+/// with a radio icon and a label. Background, border, and icon change with `isSelected`; the
+/// label color doesn't.
 struct RadioButtonListItem: View {
     /// The text shown next to the radio icon.
     let label: String
@@ -83,11 +70,8 @@ struct RadioButtonListItem: View {
     }
 }
 
-/// The design system's radio list (Figma): `N` `RadioButtonListItem`s sharing a single
-/// selection, `Spacing.sm` apart. Tapping an item selects it; radio semantics mean there's no
-/// way to deselect back to `nil` once one option is chosen.
-///
-/// Usage: see the `#Preview` below.
+/// The design system's radio list (Figma): `RadioButtonListItem`s sharing a single selection.
+/// Tapping an item selects it; there's no way to deselect back to `nil`.
 struct RadioButtonList: View {
     /// The currently chosen option.
     @Binding var selection: String?

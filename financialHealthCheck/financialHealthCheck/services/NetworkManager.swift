@@ -7,9 +7,8 @@
 
 import Foundation
 
-/// Generic HTTP transport for the app — encodes a request body and decodes a response,
-/// knowing nothing about the health-check domain. `HealthCheckRepository` is the only thing
-/// that calls this directly (see `NETWORKING.md`).
+/// Generic HTTP transport — encodes a request body and decodes a response, with no knowledge
+/// of the health-check domain.
 protocol NetworkManaging {
     /// Sends a request to `endpoint` and decodes its response as `Response`.
     ///
@@ -18,10 +17,6 @@ protocol NetworkManaging {
     ///   - method: The HTTP method to send it with.
     ///   - parameters: Encoded as the request body (or, for `.get`, as query items). `nil`
     ///     sends neither.
-    ///
-    /// Usage: `let session: HealthCheckSessionDTO = try await networkManager.request(endpoint:
-    /// url, method: .post, parameters: nil)` — `Response` is inferred from the caller's own
-    /// declared return type, never passed explicitly.
     func request<Response: Decodable>(
         endpoint: String,
         method: HTTPMethod,
@@ -29,10 +24,7 @@ protocol NetworkManaging {
     ) async throws -> Response
 }
 
-/// See `NetworkManaging`. Every throw site here surfaces a `NetworkError` — callers never
-/// need to catch anything else. The API's JSON is already `camelCase` (`sessionId`,
-/// `questionId`, ...), matching Swift's own naming, so `encoder`/`decoder` use the default
-/// key strategy — no conversion needed.
+/// Conforms to `NetworkManaging`. Every throw site surfaces a `NetworkError`.
 final class NetworkManager: NetworkManaging {
     private let encoder = JSONEncoder()
     private let decoder = JSONDecoder()
@@ -52,10 +44,7 @@ final class NetworkManager: NetworkManaging {
         }
     }
 
-    /// Builds the `URLRequest` from `endpoint`/`method`/`parameters` and fires it — the one
-    /// seam that knows `URLSession` exists. Swapping HTTP client or adding an authenticator
-    /// (attach a header before firing) both happen here; nothing else needs to change either
-    /// way.
+    /// Builds the `URLRequest` from `endpoint`/`method`/`parameters` and fires it.
     ///
     /// - Parameters:
     ///   - endpoint: The full URL to send the request to.
@@ -127,8 +116,7 @@ final class NetworkManager: NetworkManaging {
     }
 
     /// Maps a non-2xx status code, plus whatever `APIErrorDTO` (if any) came with it, to a
-    /// specific `NetworkError` case. `429`/`405` are matched on status alone; every other
-    /// status needs `apiError?.code` to disambiguate (`400` alone covers three cases).
+    /// specific `NetworkError` case.
     ///
     /// - Parameters:
     ///   - statusCode: The response's HTTP status code.

@@ -7,13 +7,11 @@
 
 import SwiftUI
 
-/// What a screen shows in place of its normal content when its ViewModel's `state` is
-/// `.error`: a `MainIcon`/`ScreenHeader` pair and a primary button pinned to the bottom edge,
-/// all driven by `error` alone via `ErrorViewKind`.
+/// Shown in place of a screen's content when its ViewModel's `state` is `.error` — a
+/// `MainIcon`/`ScreenHeader` pair and a primary button, driven by `error` via `ErrorViewKind`.
 struct ErrorView: View {
     let error: NetworkError
-    /// Called when the button ("Try Again"/"Start a new check", depending on `error`) is
-    /// tapped.
+    /// Called when the button is tapped.
     let action: () -> Void
 
     private var kind: ErrorViewKind { ErrorViewKind(error) }

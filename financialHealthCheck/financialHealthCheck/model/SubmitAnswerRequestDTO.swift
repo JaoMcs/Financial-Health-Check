@@ -7,12 +7,8 @@
 
 import Foundation
 
-/// Request body for `POST /health-check/v1/sessions/{sessionId}/submission`.
-///
-/// The response to this request is a `HealthCheckSessionDTO` — either the next question, or
-/// the final result if this was the last one.
-///
-/// Usage: `SubmitAnswerRequestDTO(questionId: question.id, answer: .text(selectedOptionId))`.
+/// Request body for `POST /health-check/v1/sessions/{sessionId}/submission`. The response is
+/// a `HealthCheckSessionDTO` — either the next question, or the final result.
 struct SubmitAnswerRequestDTO: DTO {
     /// The id of the question being answered — must match the current question's `id`.
     var questionId: String?

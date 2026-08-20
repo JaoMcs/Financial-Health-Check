@@ -7,14 +7,8 @@
 
 import SwiftUI
 
-/// The design system's raw colors (Figma), one constant per unique hex value.
-///
-/// Semantic colors that share the same hex in Figma (e.g. Background and Surface, both
-/// `#FFFFFF`) point at the same constant here, so a color only ever needs to change in one
-/// place. Don't use these directly outside of `DesignSystemColor` — reach for the semantic
-/// name that matches the context instead.
-///
-/// Usage: `DesignSystemColor.Primary.primary` reads `Palette.purple500`.
+/// The design system's raw colors (Figma), one constant per unique hex value. Reach for
+/// `DesignSystemColor`'s semantic names instead of using these directly.
 enum Palette {
     static let purple100 = Color(hex: "#EEE8FF")
     static let purple500 = Color(hex: "#6334FF")

@@ -9,19 +9,14 @@ import UIKit
 
 extension UILabel {
     /// Sets `text` styled with a design system `TypographyToken` and color — the UIKit
-    /// counterpart to `View.typography(_:)`, for text hosted outside of SwiftUI (e.g.
-    /// `NavigationHeader`'s title).
+    /// counterpart to `View.typography(_:)`.
     ///
     /// - Parameters:
     ///   - text: The string to display.
-    ///   - token: The `TypographyToken` to style it with (e.g. `Typography.Body.MD.medium`).
-    ///   - color: The text color (e.g. `DesignSystemColor.Text.uiPrimary`).
-    ///   - alignment: Baked into the attributed string's paragraph style — setting
-    ///     `textAlignment` instead doesn't reliably apply once `attributedText` is set.
-    ///     Defaults to `.natural`.
-    ///
-    /// Usage: `label.setText("Income", typography: Typography.Body.MD.medium, color:
-    /// DesignSystemColor.Text.uiPrimary, alignment: .center)`.
+    ///   - token: The `TypographyToken` to style it with.
+    ///   - color: The text color.
+    ///   - alignment: Baked into the attributed string's paragraph style. Defaults to
+    ///     `.natural`.
     func setText(
         _ text: String,
         typography token: TypographyToken,

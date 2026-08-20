@@ -8,8 +8,6 @@
 import SwiftUI
 
 /// Layout values shared by every `AppSelectControl` state (Figma).
-///
-/// Usage: `.padding(.horizontal, AppSelectControlConstants.horizontalPadding)`.
 enum AppSelectControlConstants {
     /// Corner radius of the trigger and of the options list as a whole.
     static let cornerRadius: CGFloat = 16
@@ -27,8 +25,7 @@ enum AppSelectControlConstants {
     static let optionsGap: CGFloat = Spacing.xs
 }
 
-/// Reports the trigger's rendered height up to `AppSelectControl`, so it can offset the
-/// options overlay to sit exactly below it without reserving that space in the layout.
+/// Reports the trigger's rendered height, used to offset the options overlay below it.
 private struct TriggerHeightPreferenceKey: PreferenceKey {
     static var defaultValue: CGFloat = 0
 
@@ -44,19 +41,6 @@ private struct TriggerHeightPreferenceKey: PreferenceKey {
 
 /// The design system's single select/dropdown component (Figma): a rounded trigger showing
 /// the current selection (or a placeholder) that expands into a list of `options` below it.
-///
-/// - **Empty**: light `Border`, `Text.secondary` placeholder.
-/// - **Filled**: dark `Status.selected` border, `Text.primary` value.
-/// - **Open**: reveals `options` below the trigger, same dark border, chevron flips up. Rows
-///   share one rounded group with no divider; the selected row gets `Status.selectedSubtle`.
-///   Tapping the selected row again clears `selection`.
-/// - **Error**: `isError` switches the border to `Status.error`, overriding filled/open looks.
-///   It's a `@Binding` so picking a real option clears it automatically; clearing back to
-///   `nil` does not.
-///
-/// The options list overlays below the trigger instead of pushing sibling views down.
-///
-/// Usage: see the `#Preview` below.
 struct AppSelectControl: View {
     /// The currently chosen option. `nil` shows `placeholder` instead.
     @Binding var selection: String?
@@ -189,8 +173,6 @@ struct AppSelectControl: View {
     }
 }
 
-/// One `AppSelectControl` per Figma variant: empty, filled, and error. The open look is only
-/// reachable by tapping a control in the live canvas, since `isOpen` is private.
 private struct AppSelectControlPreviewContainer: View {
     @State private var defaultSelection: String?
     @State private var chosenSelection: String? = "Option 2"

@@ -7,12 +7,8 @@
 
 import SwiftUI
 
-/// Shown right after the splash screen when a persisted session id is found, while
-/// `AppCoordinator` asks the server where that session left off — see
-/// `AppCoordinator.route()`. Same visual language as `ErrorView` (an icon-in-circle plus a
-/// `ScreenHeader`), but with a `ProgressView` centered over `Icon.iconBackground` instead of a
-/// static icon, and no button — there's no action for the user to take while this is on
-/// screen.
+/// Shown right after splash while `AppCoordinator` resumes a persisted session — a
+/// `ProgressView` over `Icon.iconBackground` plus a `ScreenHeader`, no button.
 struct RestoringSessionView: View {
     var body: some View {
         VStack(spacing: 0) {

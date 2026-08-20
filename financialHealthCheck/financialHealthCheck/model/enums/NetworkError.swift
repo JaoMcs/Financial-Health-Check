@@ -7,10 +7,8 @@
 
 import Foundation
 
-/// Every error `NetworkManager` can throw. The named cases mirror the API's own error
-/// codes — `NetworkManager` maps a non-2xx response's `(statusCode, APIErrorDTO.code)` pair
-/// to one of them; anything it doesn't recognize becomes `.unrecognizedServerError` instead
-/// of failing silently.
+/// Every error `NetworkManager` can throw. Named cases mirror the API's own error codes;
+/// anything unrecognized becomes `.unrecognizedServerError`.
 enum NetworkError: Error {
     /// 400 `INVALID_SESSION_ID`.
     case invalidSessionId

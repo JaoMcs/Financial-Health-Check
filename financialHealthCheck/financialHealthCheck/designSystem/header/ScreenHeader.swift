@@ -8,14 +8,7 @@
 import SwiftUI
 
 /// The design system's screen header (Figma): an optional caption, a title, and a
-/// description, stacked vertically, all left-aligned and stretching to the same trailing
-/// edge.
-///
-/// - **Caption**: `Body/SM-Medium`, `Text.secondary`. Omitted entirely when `nil`.
-/// - **Title**: `Heading/SM`, `Text.primary`.
-/// - **Description**: `Body/MD`, `Text.secondary`.
-///
-/// Usage: see the `#Preview`s below.
+/// description, stacked vertically and left-aligned.
 struct ScreenHeader: View {
     /// Small label shown above `title`. Not shown at all when `nil`.
     let caption: String?

@@ -7,18 +7,8 @@
 
 import SwiftUI
 
-/// A `.primary` `AppButton` stacked on top of a `.secondary` one, `Spacing.sm` (8pt) apart
-/// (Figma) — the fixed "main action" / "alternate action" pair used to close out a flow.
-///
-/// Both buttons expand to fill the available width. `ButtonDock` is what sits flush against
-/// a screen's edges, so it owns Figma's 24pt screen margin (`Spacing.twoXl`) itself, rather
-/// than baking that margin into `AppButton`, which doesn't know where it'll be placed.
-///
-/// `isPrimaryEnabled`/`isSecondaryEnabled` disable each button independently — applying a
-/// single `.disabled(_:)` to the whole `ButtonDock` would disable both at once, since
-/// `isEnabled` cascades through the environment to every descendant.
-///
-/// Usage: see the `#Preview` below.
+/// A `.primary` `AppButton` stacked on a `.secondary` one, `Spacing.sm` apart (Figma) — the
+/// fixed "main action" / "alternate action" pair used to close out a flow.
 struct ButtonDock: View {
     /// Label of the top, `.primary` button.
     let primaryText: String

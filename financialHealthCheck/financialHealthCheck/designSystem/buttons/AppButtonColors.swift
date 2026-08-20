@@ -8,10 +8,7 @@
 import SwiftUI
 
 /// The colors that distinguish one `AppButtonStyle` variant from another: fill, label/icon
-/// color, and outline. All variants share the same shape, sizing, typography, and disabled
-/// behavior — only these colors change between them.
-///
-/// Usage: `AppButtonType.primary.colors`.
+/// color, and outline.
 struct AppButtonColors {
     /// The button's fill.
     let background: Color

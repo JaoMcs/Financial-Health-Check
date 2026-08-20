@@ -8,14 +8,8 @@
 import SwiftUI
 import UIKit
 
-/// A single text style from the design system: size, weight, line height, and letter
-/// spacing.
-///
-/// Figma describes line height in px and letter spacing as a percentage of the font size;
-/// this type stores the raw values and exposes them already converted to what SwiftUI
-/// expects (`tracking` in points, `lineSpacing` as extra space between lines).
-///
-/// Usage: `.font(token.font).tracking(token.tracking).lineSpacing(token.lineSpacing)`.
+/// A single text style: size, weight, line height, and letter spacing, exposed already
+/// converted to what SwiftUI expects.
 struct TypographyToken {
     /// Font size in points.
     let size: CGFloat
@@ -31,10 +25,7 @@ struct TypographyToken {
         .system(size: size, weight: weight)
     }
 
-    /// The `UIFont` equivalent of `font`, for UIKit-hosted text (e.g.
-    /// `NavigationHeader`'s title) — `UIFont.Weight` isn't a `Font.Weight`, so this maps the
-    /// four weights `Typography` actually uses and falls back to `.regular` for any other
-    /// (`Font.Weight` is a struct, not an enum, so this can't be an exhaustive `switch`).
+    /// The `UIFont` equivalent of `font`, for UIKit-hosted text.
     var uiFont: UIFont {
         let uiWeight: UIFont.Weight
         switch weight {

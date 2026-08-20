@@ -7,8 +7,7 @@
 
 import UIKit
 
-/// Layout values for `NavigationProgressBarView`. Not specified in Figma beyond the colors —
-/// `height` is a small, reasonable pick and may need tuning once seen on device.
+/// Layout values for `NavigationProgressBarView`.
 enum NavigationProgressBarConstants {
     /// The view's height. Also its corner radius (half of it, on both the track and the
     /// fill), so both ends stay rounded.
@@ -17,15 +16,8 @@ enum NavigationProgressBarConstants {
     static let animationDuration: TimeInterval = 0.3
 }
 
-/// The design system's navigation progress bar (Figma): `Primary.primary` (`#6334FF`) filling
-/// over a `BorderAndIcon.border` (`#DAD7EE`) track, for screens in a fixed-length flow (e.g.
-/// "question 3 of 5").
-///
-/// The fill is sized in `layoutSubviews` rather than with an Auto Layout multiplier, so
-/// changing progress never needs its constraint torn down and rebuilt — just
-/// `layoutIfNeeded()`, which this animates so the fill visibly slides to its new width.
-///
-/// Usage: `progressBarView.setProgress(current: 3, total: 5)` for "step 3 of 5".
+/// The design system's navigation progress bar (Figma): a filled track for screens in a
+/// fixed-length flow, e.g. "question 3 of 5".
 final class NavigationProgressBarView: UIView {
     /// How many of `total` steps are done. Set via `setProgress(current:total:)`.
     private(set) var current = 0
@@ -45,12 +37,10 @@ final class NavigationProgressBarView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    /// Sets how far along a `total`-step flow this screen is, animating the fill to its new
-    /// width.
+    /// Sets how far along a `total`-step flow this screen is, animating the fill.
     ///
     /// - Parameters:
-    ///   - current: How many steps are done, e.g. `3` for "step 3 of 5". Clamped to
-    ///     `0...total`.
+    ///   - current: How many steps are done. Clamped to `0...total`.
     ///   - total: The flow's total step count.
     func setProgress(current: Int, total: Int) {
         self.total = max(total, 0)

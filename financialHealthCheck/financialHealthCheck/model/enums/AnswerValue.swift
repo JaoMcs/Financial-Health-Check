@@ -7,13 +7,9 @@
 
 import Foundation
 
-/// The value submitted as a question's answer.
-///
-/// The API expects a different JSON type depending on the question type, so this encodes and
-/// decodes as a single raw value instead of a keyed object: a string for `single_choice`, an
-/// array of strings for `multiple_choice`, or a number for `number`.
-///
-/// Usage: `SubmitAnswerRequestDTO(questionId: id, answer: .text("opt_1"))`.
+/// The value submitted as a question's answer. Encodes/decodes as a single raw value — a
+/// string for `single_choice`, an array of strings for `multiple_choice`, or a number for
+/// `number` — instead of a keyed object.
 enum AnswerValue: Equatable {
     /// `single_choice` — the selected option's id.
     case text(String)

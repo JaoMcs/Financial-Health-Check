@@ -7,14 +7,10 @@
 
 import SwiftUI
 
-/// The design system's icon-on-circle composition (Figma): `Icon.iconBackground`'s gradient
-/// circle with `icon` centered on top — both rendered at their asset's own size, so neither
-/// needs an explicit `frame`.
+/// The design system's icon-on-circle composition (Figma): `Icon.iconBackground` with `icon`
+/// centered on top.
 ///
-/// - Parameter icon: The icon shown centered over `Icon.iconBackground`, e.g.
-///   `Icon.iconNoInternet`.
-///
-/// Usage: `MainIcon(icon: Icon.iconNoInternet)`.
+/// - Parameter icon: The icon shown centered over `Icon.iconBackground`.
 struct MainIcon: View {
     let icon: Image
 

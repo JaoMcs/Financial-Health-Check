@@ -23,9 +23,7 @@ private struct TypographyModifier: ViewModifier {
 extension View {
     /// Styles this view with a design system `TypographyToken`.
     ///
-    /// - Parameter token: The `TypographyToken` to apply (e.g. `Typography.Body.LG.regular`).
-    ///
-    /// Usage: `Text("Hi").typography(Typography.Body.LG.regular)`.
+    /// - Parameter token: The `TypographyToken` to apply.
     func typography(_ token: TypographyToken) -> some View {
         modifier(TypographyModifier(token: token))
     }

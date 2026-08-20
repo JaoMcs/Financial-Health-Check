@@ -8,8 +8,6 @@
 import SwiftUI
 
 /// Layout values shared by every `ListItem` configuration (Figma).
-///
-/// Usage: `.padding(.trailing, ListItemConstants.rowTrailingPadding)`.
 enum ListItemConstants {
     /// The label/description column's leading padding, used only when there's no
     /// `leadingIcon` (the icon supplies the row's leading edge itself otherwise).
@@ -32,36 +30,17 @@ enum ListItemConstants {
 }
 
 /// What `ListItem` shows on its trailing edge.
-///
-/// Usage: `.chevron` for a navigation row, `.money("120.00")` for a row that ends in a
-/// currency value.
 enum ListItemAccessory {
     /// A trailing chevron, for rows that navigate somewhere on tap.
     case chevron
-    /// A trailing `"£<amount>"` label, built from `amount` — the currency symbol isn't a
-    /// separate piece, it's baked into the one `Text` this renders.
+    /// A trailing `"£<amount>"` label built from `amount`.
     case money(String)
 }
 
-/// The design system's single, generic list item component (Figma): one row shape that
-/// every kind of list row is, configured rather than subtyped. `leadingIcon`, `description`,
-/// and `accessory` are independent of each other and can be combined freely — e.g. a row can
-/// have both a leading icon and a description at once.
-///
-/// - **Default**: just `label`, `Text.primary` `Body/MD-Medium`, with a trailing `.chevron`.
-/// - **With a description**: pass `description` to show a second line, `Text.secondary`
-///   `Body/MD` (regular), directly under `label` with no gap between them.
-/// - **With a leading icon**: pass `leadingIcon` to show it at 40x40 on the row's leading
-///   edge; the label/description column no longer needs its own leading padding, since the
-///   icon now supplies the row's left edge.
-/// - **With a money accessory**: pass `accessory: .money(amount)` instead of the default
-///   `.chevron` to end the row in a `Body/LG` `Text.secondary` currency value instead.
-///
-/// Unlike `RadioButtonListItem`/`CheckboxListItem`, this has no background, border, or
-/// corner radius of its own — it's meant to sit inside whatever card or list container the
-/// screen provides, not to look like one itself.
-///
-/// Usage: see the `#Preview` below.
+/// The design system's single, generic list item component (Figma): one row shape, configured
+/// rather than subtyped. `leadingIcon`, `description`, and `accessory` are independent and can
+/// be combined freely. Unlike `RadioButtonListItem`/`CheckboxListItem`, it has no background,
+/// border, or corner radius of its own.
 struct ListItem: View {
     /// The row's main text.
     let label: String

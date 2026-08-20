@@ -7,11 +7,8 @@
 
 import Foundation
 
-/// The state a screen's ViewModel is in while it loads data from a `HealthCheckRepositoring`
-/// call — drives which of loading/content/error the View renders.
-///
-/// Usage: `@Published var state: ViewState = .loading`, then `switch state { case .loading:
-/// ProgressView(); case .content: ...; case .error(let error): ... }`.
+/// The state a screen's ViewModel is in while it loads data — drives which of
+/// loading/content/error the View renders.
 enum ViewState: Equatable {
     /// A request is in flight — nothing to render yet.
     case loading

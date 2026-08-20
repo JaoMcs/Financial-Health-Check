@@ -72,8 +72,7 @@ final class QuestionCoordinator: Coordinator {
         questionCoordinator.start()
     }
 
-    /// Reached from `QuestionaryViewModel.resetSession()` — the session was just cleared
-    /// because the last error meant it couldn't continue (`ErrorViewKind.requiresSessionReset`).
+    /// Reached from `QuestionaryViewModel.resetSession()`, after the session was cleared.
     private func goToStart() {
         let startCoordinator = StartCoordinator(
             navigationController: navigationController,

@@ -7,12 +7,8 @@
 
 import Foundation
 
-/// The body of a non-2xx API response.
-///
-/// Dependencies: `DTO`.
-///
-/// Usage: decoded by `NetworkManager` whenever a response's status code isn't 2xx, then
-/// mapped (together with that status code) to a `NetworkError` case.
+/// The body of a non-2xx API response, decoded by `NetworkManager` and mapped to a
+/// `NetworkError` case.
 struct APIErrorDTO: DTO {
     /// A machine-readable error code, e.g. `"INVALID_SESSION_ID"`.
     var code: String?

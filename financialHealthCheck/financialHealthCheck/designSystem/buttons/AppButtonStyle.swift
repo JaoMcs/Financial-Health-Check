@@ -7,29 +7,21 @@
 
 import SwiftUI
 
-/// The design system's shared button shape: pill-shaped, fixed height, expands to fill all
-/// available width, `Body/MD-Medium` typography, single-line label (truncates rather than
-/// wrapping), dimmed-opacity tap feedback, and 50% opacity while disabled.
-///
-/// Only `colors` changes between the `.primary`, `.secondary`, and `.destructive` variants
-/// exposed on `ButtonStyle` — see `AppButtonColors`.
-///
-/// Usage: `.buttonStyle(AppButtonStyle(colors: .primary))`.
+/// The design system's shared button shape: pill-shaped, fixed height, full width,
+/// `Body/MD-Medium` typography, single-line label, dimmed-opacity tap feedback, and 50%
+/// opacity while disabled.
 struct AppButtonStyle: ButtonStyle {
-    /// The fill/foreground/border set this instance renders — see `AppButtonColors`.
+    /// The fill/foreground/border set this instance renders.
     let colors: AppButtonColors
 
-    /// Builds the button's body for `configuration`, as required by `ButtonStyle`.
-    ///
-    /// - Parameter configuration: The `ButtonStyleConfiguration` SwiftUI passes in, holding
-    ///   the button's `label` and `isPressed` state.
+    /// Builds the button's body for `configuration`.
     func makeBody(configuration: Configuration) -> some View {
         AppButtonBody(configuration: configuration, colors: colors)
     }
 }
 
-/// Renders `AppButtonStyle`'s configuration. A separate `View` is needed to read
-/// `@Environment(\.isEnabled)`, which `ButtonStyle.makeBody` doesn't receive directly.
+/// Renders `AppButtonStyle`'s configuration — a separate `View` so it can read
+/// `@Environment(\.isEnabled)`.
 private struct AppButtonBody: View {
     let configuration: AppButtonStyle.Configuration
     let colors: AppButtonColors

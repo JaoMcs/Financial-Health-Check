@@ -11,15 +11,8 @@ import UIKit
 /// The app's root coordinator — owns the window and its navigation stack, shows the splash
 /// screen, and starts whichever flow the resolved session state points to.
 ///
-/// There's no separate `SplashCoordinator`: the splash "screen" is `LaunchScreen.storyboard`'s
-/// own view controller (already designed, no ViewModel, no user interaction), so resolving
-/// where to go next is a plain step inside this coordinator's `start()` rather than a flow of
-/// its own.
-///
 /// - Parameter window: The scene's window; `AppCoordinator` sets its `rootViewController` and
 ///   makes it key and visible.
-///
-/// Usage: created and started once, in `SceneDelegate.scene(_:willConnectTo:options:)`.
 final class AppCoordinator: Coordinator {
     private let window: UIWindow
     private let navigationController = UINavigationController()
@@ -44,11 +37,8 @@ final class AppCoordinator: Coordinator {
         }
     }
 
-    /// Resolves the destination and shows it. Clears the splash from `navigationController`
-    /// first — it's not a real screen, so whichever coordinator starts next shouldn't have it
-    /// sitting underneath as a back target. Pushing onto an empty stack already behaves like
-    /// setting a root (no back button), so this is enough on its own; no coordinator needs to
-    /// know whether it's first.
+    /// Resolves the destination and shows it, clearing the splash screen from
+    /// `navigationController` first.
     private func route() async {
         if repository.hasExistingSession() {
             showRestoringSession()
@@ -92,8 +82,7 @@ final class AppCoordinator: Coordinator {
     }
 
     /// Replaces the splash screen with `RestoringSessionView` while `resolveDestination()`
-    /// asks the server where the persisted session left off — called only when a session id
-    /// is already there to resume, so this never shows for a first-time launch.
+    /// asks the server where the persisted session left off.
     private func showRestoringSession() {
         let restoringViewController = UIHostingController(rootView: RestoringSessionView())
         navigationController.setViewControllers([restoringViewController], animated: true)

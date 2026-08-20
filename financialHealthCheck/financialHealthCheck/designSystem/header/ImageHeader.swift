@@ -8,36 +8,27 @@
 import SwiftUI
 
 /// Layout values for `ImageHeader` (Figma).
-///
-/// Usage: `.frame(width: ImageHeaderConstants.imageSize, height: ImageHeaderConstants.imageSize)`.
 enum ImageHeaderConstants {
-    /// Width and height of `.image` media. `.score` media sizes itself instead, via
+    /// Width and height of `.image` media. `.score` media sizes itself, via
     /// `ScoreDisplayConstants.size`.
     static let imageSize: CGFloat = 200
 }
 
 /// What `ImageHeader` shows above its title/description.
 enum ImageHeaderMedia {
-    /// A 200x200 image.
+    /// A fixed image.
     case image(Image)
-    /// A `ScoreDisplay` (240x240), showing `value` out of `maxScore`.
+    /// A `ScoreDisplay` showing `value` out of `maxScore`.
     case score(value: Int, maxScore: Int)
 }
 
 /// The design system's centered image header (Figma): `media`, a title, and a description,
-/// stacked vertically and all center-aligned.
-///
-/// - **Media**: 200x200 (`.image`) or 240x240 (`.score`), 32pt below it.
-/// - **Title**: `Heading/LG`, `Text.primary`, 8pt below it.
-/// - **Description**: `Body/MD`, `Text.secondary`.
+/// stacked vertically and center-aligned.
 ///
 /// - Parameters:
 ///   - media: Shown at the top — either a fixed image or a score ring.
 ///   - title: The heading shown below `media`.
 ///   - description: Supporting copy shown below `title`.
-///
-/// Usage: `ImageHeader(media: .image(Icon.mainImage), title: "...", description: "...")`, or
-/// `ImageHeader(media: .score(value: 78, maxScore: 100), title: "...", description: "...")`.
 struct ImageHeader: View {
     let media: ImageHeaderMedia
     let title: String

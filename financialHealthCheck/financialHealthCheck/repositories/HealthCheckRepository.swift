@@ -8,9 +8,7 @@
 import Foundation
 
 /// Domain operations for the health-check questionnaire flow — the only thing ViewModels
-/// depend on for data. `NetworkManager` owns the mechanical "request" verb; this owns the
-/// domain verb, so a ViewModel never needs to know its data comes from a network call at all
-/// (see `NETWORKING.md`).
+/// depend on for data.
 protocol HealthCheckRepositoring {
     /// Whether this device already has a persisted session, without making a network call.
     func hasExistingSession() -> Bool
@@ -27,8 +25,7 @@ protocol HealthCheckRepositoring {
     func deleteSession()
 }
 
-/// See `HealthCheckRepositoring`. The only thing that talks to `KeychainManager` — no other
-/// part of the app touches the Keychain directly.
+/// Conforms to `HealthCheckRepositoring`. The only thing that talks to `KeychainManager`.
 ///
 /// - Parameter networkManager: Sends this repository's requests to the API.
 final class HealthCheckRepository: HealthCheckRepositoring {
@@ -42,8 +39,7 @@ final class HealthCheckRepository: HealthCheckRepositoring {
         KeychainManager.load() != nil
     }
 
-    /// Returns the persisted session id, generating and persisting a new one if none exists
-    /// yet. Every call site needs the same id — the one the session started with.
+    /// Returns the persisted session id, generating and persisting a new one if none exists yet.
     private func resolvedSessionId() -> String {
         if let sessionId = KeychainManager.load() {
             return sessionId

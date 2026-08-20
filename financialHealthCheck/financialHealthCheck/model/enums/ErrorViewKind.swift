@@ -7,10 +7,8 @@
 
 import SwiftUI
 
-/// The presentation `ErrorView` actually varies on. Several `NetworkError` cases collapse
-/// into the same one below when the user has nothing different to do about them — see
-/// `init(_:)` — keeping the app down to a handful of distinct messages/icons instead of one
-/// per `NetworkError` case.
+/// The presentation `ErrorView` varies on. Several `NetworkError` cases collapse into the same
+/// kind when the user has nothing different to do about them.
 enum ErrorViewKind {
     /// `.transport` — no connectivity, or the request timed out.
     case offline
@@ -20,10 +18,8 @@ enum ErrorViewKind {
     case sessionLost
     /// `.sessionAlreadyCompleted` — the session still exists, but was already finished.
     case sessionCompleted
-    /// `.invalidQuestion` — the session itself is still valid; the answer was just submitted
-    /// for a question that's no longer the current one (e.g. the user navigated back to an
-    /// already-answered question and tapped "Continue" from there). Distinct from
-    /// `.sessionLost`: nothing about the session is actually broken.
+    /// `.invalidQuestion` — the session is still valid; the answer was submitted for a
+    /// question that's no longer the current one (e.g. the user went back and resubmitted).
     case questionOutOfSync
     /// `.rateLimited` — too many requests in a short time.
     case rateLimited
@@ -66,10 +62,8 @@ enum ErrorViewKind {
         }
     }
 
-    /// Whether this kind's primary action clears the current session and starts a new one,
-    /// rather than retrying the operation that just failed. Mirrors
-    /// `Strings.Error.buttonTitle(for:)`'s own grouping — callers use this instead of matching
-    /// on `buttonTitle`'s text to decide which action to wire up.
+    /// Whether this kind's primary action clears the session and starts a new one, rather than
+    /// retrying the operation that just failed.
     var requiresSessionReset: Bool {
         switch self {
         case .sessionLost, .sessionCompleted, .questionOutOfSync:

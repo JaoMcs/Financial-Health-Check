@@ -8,11 +8,8 @@
 import Foundation
 import Security
 
-/// Owns storing and retrieving the health-check session id in the device Keychain.
-///
-/// The session id is a client-generated UUID string with no accompanying metadata, so it is
-/// persisted as-is (UTF-8 encoded) rather than wrapped in a structured payload. No other part
-/// of the app should talk to the Keychain directly — go through this type instead.
+/// Owns storing and retrieving the health-check session id in the device Keychain. No other
+/// part of the app should talk to the Keychain directly.
 enum KeychainManager {
     private static let service = "com.financialHealthCheck.session"
     private static let account = "sessionId"
@@ -36,8 +33,7 @@ enum KeychainManager {
         SecItemAdd(attributes as CFDictionary, nil)
     }
 
-    /// Returns the stored session id, or `nil` if none has been saved yet — signaling that no
-    /// health-check session has been started on this device.
+    /// Returns the stored session id, or `nil` if none has been saved yet.
     static func load() -> String? {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
@@ -59,7 +55,7 @@ enum KeychainManager {
         return sessionId
     }
 
-    /// Removes the stored session id, if any. Used to clear the session on logout.
+    /// Removes the stored session id, if any.
     static func delete() {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,

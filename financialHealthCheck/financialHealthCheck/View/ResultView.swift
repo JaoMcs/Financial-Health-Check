@@ -7,8 +7,7 @@
 
 import SwiftUI
 
-/// The flow's result screen (Figma): an `ImageHeader` — showing `score` via `ScoreDisplay`
-/// instead of an image — centered in the top half of the screen, an empty bottom half, and a
+/// The flow's result screen: an `ImageHeader` showing `score` via `ScoreDisplay`, and a
 /// `ButtonDock` pinned to the bottom edge.
 struct ResultView: View {
     @ObservedObject var viewModel: ResultViewModel

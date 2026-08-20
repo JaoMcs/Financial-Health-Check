@@ -7,13 +7,8 @@
 
 import SwiftUI
 
-/// The design system's typography scale, grouped by Figma category.
-///
-/// `Body.LG`, `Body.MD`, and `Body.SM` each hold a `.regular` and a `.medium` variant — in
-/// Figma these are separate styles (e.g. `Body/LG` and `Body/LG-Medium`) that only differ in
-/// weight and letter spacing, so they're unified here under one size.
-///
-/// Usage: `Text("Hi").typography(Typography.Body.LG.regular)`.
+/// The design system's typography scale, grouped by Figma category. `Body` sizes each hold a
+/// `.regular` and a `.medium` variant.
 enum Typography {
 
     /// The large display sizes used for screen titles and section headers.

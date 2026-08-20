@@ -9,8 +9,6 @@ import SwiftUI
 import UIKit
 
 /// Layout values shared by every `AppTextField` configuration (Figma).
-///
-/// Usage: `.padding(.horizontal, AppTextFieldConstants.horizontalPadding)`.
 enum AppTextFieldConstants {
     /// Corner radius of the field's background/border.
     static let cornerRadius: CGFloat = 16
@@ -31,26 +29,7 @@ enum AppTextFieldConstants {
 }
 
 /// The design system's single text field component (Figma): white, rounded, single-line
-/// input with `Body/LG` typography — `Text.secondary` while showing the placeholder,
-/// `Text.primary` once there's real input.
-///
-/// Every variant in Figma ("default", "with prefix", "with label", "error state") is this
-/// same view, just configured differently, rather than a separate type per variant:
-/// - **With prefix**: pass `prefix` (e.g. `"€"`) to show a symbol before the input.
-/// - **With message**: pass `message` to show text below the field, leading-aligned to it.
-/// - **Error state**: also pass `isError: true` to switch the border and `message` to
-///   `Status.error` — `message` itself doesn't change, only its color and the border's.
-///
-/// The field expands to fill all available width (matching `AppButton`'s sizing), which is
-/// what makes "leading-aligned to the field" a meaningful position for `message` rather than
-/// depending on how wide the placeholder happens to be.
-///
-/// `TextField`'s `prompt` parameter must stay a `Text`, so the placeholder is styled through
-/// `Text`'s own `font`/`tracking`/`foregroundColor` overloads (which return `Text`) instead of
-/// this file's usual `.typography`/`.foregroundStyle` view modifiers (which return `some
-/// View` and don't type-check there).
-///
-/// Usage: see the `#Preview` below.
+/// input with `Body/LG` typography, an optional prefix, and an optional error state.
 struct AppTextField: View {
     /// The field's current input.
     @Binding var text: String
@@ -113,8 +92,6 @@ struct AppTextField: View {
     }
 }
 
-/// One `AppTextField` per Figma variant: default, with a currency prefix, with a message, and
-/// in its error state.
 private struct AppTextFieldPreviewContainer: View {
     @State private var defaultText = ""
     @State private var prefixText = ""

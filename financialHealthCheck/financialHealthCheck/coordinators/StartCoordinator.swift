@@ -8,8 +8,7 @@
 import SwiftUI
 import UIKit
 
-/// Shows the flow's intro screen (`StartView`). Just that for now — nothing to hand off to
-/// yet.
+/// Shows the flow's intro screen (`StartView`).
 ///
 /// - Parameters:
 ///   - navigationController: The stack this flow shows its screen on.
@@ -33,7 +32,7 @@ final class StartCoordinator: Coordinator {
         navigationController.setViewControllers([UIHostingController(rootView: view)], animated: false)
     }
 
-    /// Sets `viewModel`'s closures to this coordinator's own navigation — empty for now.
+    /// Sets `viewModel`'s closures to this coordinator's own navigation.
     ///
     /// - Parameter viewModel: The view model to configure.
     private func configure(_ viewModel: StartViewModel) {

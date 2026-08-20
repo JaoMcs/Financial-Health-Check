@@ -8,8 +8,6 @@
 import SwiftUI
 
 /// Layout values shared by every `CheckboxListItem` state (Figma).
-///
-/// Usage: `.padding(.leading, CheckboxListItemConstants.iconLeadingPadding)`.
 enum CheckboxListItemConstants {
     /// Corner radius of the item's background/border.
     static let cornerRadius: CGFloat = 16
@@ -29,20 +27,8 @@ enum CheckboxListItemConstants {
 }
 
 /// The design system's single checkbox list item component (Figma): a rounded, tappable row
-/// with a 24x24 checkbox icon and a label. Similar to `RadioButtonListItem`, but for
-/// multiple selections instead of one — see `CheckboxList`.
-///
-/// - **Checked**: `Status.selectedSubtle` background, `Status.selected` border at 2pt,
-///   `Icon.checkboxSelected`.
-/// - **Unchecked**: `Surface` (white) background, light `Border` at 1pt,
-///   `Icon.checkboxNotSelected`.
-///
-/// The label's color doesn't change between states — only the background, border, and icon
-/// do. The icon carries its own padding rather than sharing the row's: 20pt on its leading
-/// edge, 24pt on its top and bottom, and 12pt on its trailing edge (the gap to the label) —
-/// the row then adds its own 20pt trailing padding to match the icon's leading inset.
-///
-/// Usage: see the `#Preview` below.
+/// with a checkbox icon and a label, for multiple selections — see `CheckboxList`. Background,
+/// border, and icon change with `isChecked`; the label color doesn't.
 struct CheckboxListItem: View {
     /// The text shown next to the checkbox icon.
     let label: String
@@ -91,11 +77,8 @@ struct CheckboxListItem: View {
     }
 }
 
-/// The design system's checkbox list (Figma): `N` `CheckboxListItem`s sharing one set of
-/// checked options, `Spacing.sm` apart. Tapping an item toggles it in `selections`,
-/// independent of every other item.
-///
-/// Usage: see the `#Preview` below.
+/// The design system's checkbox list (Figma): `CheckboxListItem`s sharing one set of checked
+/// options. Tapping an item toggles it in `selections`, independent of every other item.
 struct CheckboxList: View {
     /// The currently checked options.
     @Binding var selections: Set<String>

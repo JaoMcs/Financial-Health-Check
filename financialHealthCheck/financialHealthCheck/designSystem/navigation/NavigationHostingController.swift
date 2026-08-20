@@ -9,24 +9,13 @@ import SwiftUI
 import UIKit
 
 /// Hosts a SwiftUI screen as a child view controller and installs a `NavigationHeader` on
-/// itself, so a coordinator gets the SwiftUI-hosting + header-installing steps in one call
-/// instead of doing both itself every time it pushes a screen.
-///
-/// A plain `UIViewController` wrapping a `UIHostingController<Content>` child — not a
-/// `UIHostingController` subclass itself — because `NavigationHeader` adds
-/// `NavigationProgressBarView` as a sibling subview. Adding it directly inside a
-/// `UIHostingController`'s own view isn't supported (SwiftUI manages that view's hierarchy
-/// internally); this way, the hosted content and the progress bar are both plain subviews of
-/// this controller's own `view`, a common superview SwiftUI doesn't touch.
+/// itself, so a coordinator gets both steps in one call when it pushes a screen.
 ///
 /// - Parameters:
 ///   - rootView: The SwiftUI screen to host.
 ///   - title: Forwarded to `NavigationHeader`.
 ///   - current: Forwarded to `NavigationHeader`.
 ///   - total: Forwarded to `NavigationHeader`. `0` (the default) hides the progress bar.
-///
-/// Usage: `NavigationHostingController(rootView: QuestionaryView(viewModel: viewModel), title:
-/// "Question", current: 1, total: 5)`.
 final class NavigationHostingController<Content: View>: UIViewController {
     private let hostingController: UIHostingController<Content>
     private let headerTitle: String
@@ -57,9 +46,7 @@ final class NavigationHostingController<Content: View>: UIViewController {
         NavigationHeader.styleBackButton(on: navigationController)
     }
 
-    /// Adds `hostingController` as a child, filling this controller's `view` edge to edge —
-    /// standard UIKit child-view-controller containment, so its view stays a plain subview
-    /// `NavigationHeader` can add `NavigationProgressBarView` alongside.
+    /// Adds `hostingController` as a child, filling this controller's `view` edge to edge.
     private func embedHostingController() {
         addChild(hostingController)
         view.addSubview(hostingController.view)

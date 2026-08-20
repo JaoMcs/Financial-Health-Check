@@ -8,17 +8,9 @@
 import SwiftUI
 import UIKit
 
-/// The design system's semantic colors, grouped by Figma category.
-///
-/// Each name points at a `Palette` constant — the hex value only exists in one place; pick
-/// whichever name reads best for the context you're styling.
-///
-/// Usage: `Text.primary` for a label, `Status.error` for a validation message.
-///
-/// A few entries also have a `ui`-prefixed `UIColor` counterpart (e.g. `Text.uiPrimary`), for
-/// UIKit code that needs to stay free of a SwiftUI import (e.g. `NavigationHeader`,
-/// `NavigationProgressBarView`) — added only for the colors a UIKit consumer actually uses,
-/// same reasoning as `TypographyToken.uiFont`.
+/// The design system's semantic colors, grouped by Figma category. Each name points at a
+/// `Palette` constant. A few also have a `ui`-prefixed `UIColor` counterpart (e.g.
+/// `Text.uiPrimary`) for UIKit code that needs to avoid a SwiftUI import.
 enum DesignSystemColor {
 
     /// Brand color and its interaction states (hover, subtle background).
