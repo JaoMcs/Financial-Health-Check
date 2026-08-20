@@ -80,7 +80,8 @@ struct QuestionaryView: View {
                 placeholder: Strings.Question.numberPlaceholder,
                 prefix: Strings.Question.numberPrefix,
                 message: viewModel.numberRangeMessage,
-                isError: viewModel.isNumberInvalid
+                isError: viewModel.isNumberInvalid,
+                keyboardType: .decimalPad
             )
         }
     }

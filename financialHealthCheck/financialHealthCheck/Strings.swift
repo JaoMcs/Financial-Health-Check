@@ -154,7 +154,7 @@ enum Strings {
         ///   - min: `QuestionValidationDTO.min`.
         ///   - max: `QuestionValidationDTO.max`.
         static func numberRangeMessage(min: Int, max: Int) -> String {
-            "Enter a whole number between \(min) and \(max)."
+            "Enter a number between \(min) and \(max)."
         }
     }
 }

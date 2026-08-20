@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 /// The design system's single text field component (Figma): white, rounded, single-line
 /// input with `Body/LG` typography — `Text.secondary` while showing the placeholder,
@@ -41,6 +42,9 @@ struct AppTextField: View {
     /// Whether `message` and the field's border render in `Status.error` instead of their
     /// default colors.
     var isError = false
+    /// The keyboard shown while editing. `.default` unless the caller passes something more
+    /// specific — e.g. `.decimalPad` for a numeric field.
+    var keyboardType: UIKeyboardType = .default
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -62,6 +66,7 @@ struct AppTextField: View {
                 .typography(Typography.Body.LG.regular)
                 .foregroundStyle(DesignSystemColor.Text.primary)
                 .textFieldStyle(.plain)
+                .keyboardType(keyboardType)
             }
             .padding(.horizontal, AppTextFieldMetrics.horizontalPadding)
             .padding(.vertical, AppTextFieldMetrics.verticalPadding)

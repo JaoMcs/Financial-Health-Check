@@ -101,6 +101,14 @@ fully hardened, and are called out here instead of being silently shipped:
 - **`minSelections`/`maxSelections` are decoded but not enforced** — `.multipleChoice` only
   requires "something is selected" to continue, not that the count falls within the range the
   API sends.
+- **Coordinators are never released once their screen is gone** — each coordinator appends every
+  coordinator it creates to a `childCoordinators` array and never removes one, so the chain only
+  grows; retaking the questionnaire stacks a new attempt on top of the previous one instead of
+  replacing it. Each one only holds a small DTO and two closures, and a session realistically
+  spans a handful of questions, so the memory cost stays negligible at this scope — fixing it
+  properly (tying a coordinator's lifetime to its own screen, or resetting from whichever
+  coordinator owns the top of the chain) was judged not worth the added complexity for a
+  take-home of this size.
 
 ## Significant Libraries/Dependencies
 
@@ -224,5 +232,16 @@ single-glance way — not detailed specs — but they were what actually kept th
 track: a quick checkpoint of what was already done, what was next, and what was still open, so
 development never drifted or got lost along the way.
 
-**Time spent:** ~20 hours over one week — roughly 5h+ per day on weekend days, ~2h per day on
-weekdays.
+**Time spent:** ~15.5 hours over the week, day by day:
+
+| Day | Date | Hours | Focus |
+|---|---|---|---|
+| Wednesday | Aug 12 | ~1h | Initial planning — setting up the Trello task board. |
+| Thursday | Aug 13 | ~2h | Thinking through the app's architecture and module breakdown, then starting on it. |
+| Friday | Aug 14 | ~1.5h | Started the design system. |
+| Saturday–Sunday | Aug 15–16 | ~5h | Building out the design system. |
+| Monday | Aug 17 | ~2.5h | Finished the design system, moved on to the app's actual functionality. |
+| Tuesday | Aug 18 | — | Day off. |
+| Wednesday | Aug 19 | ~1h | Functionality. |
+| Thursday | Aug 20 | ~2.5h | Polishing the functionality and closing out the open points still remaining. |
+| **Total** | | **~15.5h** | |

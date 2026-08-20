@@ -118,14 +118,14 @@ final class QuestionaryViewModelTests: XCTestCase {
         let session = Fixtures.session(question: Fixtures.numberQuestion(min: 5, max: 50))
         let viewModel = QuestionaryViewModel(repository: MockHealthCheckRepository(), session: session)
 
-        XCTAssertEqual(viewModel.numberRangeMessage, "Enter a whole number between 5 and 50.")
+        XCTAssertEqual(viewModel.numberRangeMessage, "Enter a number between 5 and 50.")
     }
 
     func testNumberRangeMessage_whenValidationMissing_defaultsBoundsToZero() {
         let session = Fixtures.session(question: Fixtures.numberQuestion())
         let viewModel = QuestionaryViewModel(repository: MockHealthCheckRepository(), session: session)
 
-        XCTAssertEqual(viewModel.numberRangeMessage, "Enter a whole number between 0 and 0.")
+        XCTAssertEqual(viewModel.numberRangeMessage, "Enter a number between 0 and 0.")
     }
 
     // MARK: - isNumberInvalid
@@ -181,6 +181,30 @@ final class QuestionaryViewModelTests: XCTestCase {
         let session = Fixtures.session(question: Fixtures.numberQuestion(min: 0, max: 10))
         let viewModel = QuestionaryViewModel(repository: MockHealthCheckRepository(), session: session)
         viewModel.numberText = "5"
+
+        XCTAssertFalse(viewModel.isNumberInvalid)
+    }
+
+    func testIsNumberInvalid_whenValueIsDecimalWithinRange_returnsFalse() {
+        let session = Fixtures.session(question: Fixtures.numberQuestion(min: 0, max: 10))
+        let viewModel = QuestionaryViewModel(repository: MockHealthCheckRepository(), session: session)
+        viewModel.numberText = "5.5"
+
+        XCTAssertFalse(viewModel.isNumberInvalid)
+    }
+
+    func testIsNumberInvalid_whenValueIsDecimalAboveMax_returnsTrue() {
+        let session = Fixtures.session(question: Fixtures.numberQuestion(min: 0, max: 10))
+        let viewModel = QuestionaryViewModel(repository: MockHealthCheckRepository(), session: session)
+        viewModel.numberText = "10.5"
+
+        XCTAssertTrue(viewModel.isNumberInvalid)
+    }
+
+    func testIsNumberInvalid_whenValueUsesCommaAsDecimalSeparator_returnsFalse() {
+        let session = Fixtures.session(question: Fixtures.numberQuestion(min: 0, max: 10))
+        let viewModel = QuestionaryViewModel(repository: MockHealthCheckRepository(), session: session)
+        viewModel.numberText = "5,5"
 
         XCTAssertFalse(viewModel.isNumberInvalid)
     }
@@ -299,6 +323,13 @@ final class QuestionaryViewModelTests: XCTestCase {
         viewModel.numberText = "42"
 
         XCTAssertEqual(viewModel.makeAnswer(), .number(42))
+    }
+
+    func testMakeAnswer_whenNumberTextUsesCommaAsDecimalSeparator_returnsNumberWithPeriod() {
+        let viewModel = QuestionaryViewModel(repository: MockHealthCheckRepository(), session: nil)
+        viewModel.numberText = "5,5"
+
+        XCTAssertEqual(viewModel.makeAnswer(), .number(5.5))
     }
 
     func testMakeAnswer_whenNothingSelected_returnsNil() {

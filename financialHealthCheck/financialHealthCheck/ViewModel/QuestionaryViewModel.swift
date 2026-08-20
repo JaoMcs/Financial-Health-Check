@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Foundation
 
 /// `QuestionaryView`'s view model.
 @MainActor
@@ -75,15 +76,23 @@ final class QuestionaryViewModel: ObservableObject {
         )
     }
 
-    /// Whether `numberText` is non-empty but isn't a whole number within
+    /// Whether `numberText` is non-empty but isn't a number within
     /// `validation.min`/`max` — `min`/`max` themselves are allowed values.
     var isNumberInvalid: Bool {
         guard !numberText.isEmpty else { return false }
-        guard let value = Int(numberText) else { return true }
+        guard let value = numberValue else { return true }
 
-        let min = session?.question?.validation?.min ?? 0
-        let max = session?.question?.validation?.max ?? 0
+        let min = Double(session?.question?.validation?.min ?? 0)
+        let max = Double(session?.question?.validation?.max ?? 0)
         return value < min || value > max
+    }
+
+    /// `numberText` parsed as a `Double`, accepting `,` as well as `.` for the decimal
+    /// separator — `.decimalPad`'s separator key inserts whatever the device's locale uses
+    /// (`,` in pt-BR), which `Double.init?(String:)` only recognizes as `.`, regardless of
+    /// locale.
+    private var numberValue: Double? {
+        Double(numberText.replacingOccurrences(of: ",", with: "."))
     }
 
     /// Whether `multipleSelections` is non-empty but its count falls outside
@@ -147,7 +156,7 @@ final class QuestionaryViewModel: ObservableObject {
         } else if !multipleSelections.isEmpty {
             let optionIds = multipleSelections.compactMap { optionId(forTitle: $0) }
             return optionIds.isEmpty ? nil : .choices(optionIds)
-        } else if let number = Double(numberText) {
+        } else if let number = numberValue {
             return .number(number)
         }
         return nil
