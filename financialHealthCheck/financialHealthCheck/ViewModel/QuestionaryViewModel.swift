@@ -11,6 +11,7 @@ import Foundation
 /// `QuestionaryView`'s view model.
 @MainActor
 final class QuestionaryViewModel: ObservableObject {
+    // MARK: - Dependencies
     private let repository: HealthCheckRepositoring
     private let session: HealthCheckSessionDTO?
 
@@ -27,10 +28,9 @@ final class QuestionaryViewModel: ObservableObject {
     @Published var state: ViewState = .content
 
     /// The session `submitAnswer()` resolved, once it returns.
-    @Published private(set) var nextSession: HealthCheckSessionDTO?
+    @Published private var nextSession: HealthCheckSessionDTO?
 
     /// Called when the user taps "Continue", with the session `submitAnswer()` resolved. Set
-    /// by `QuestionCoordinator` — empty for now.
     var onContinueTapped: ((HealthCheckSessionDTO?) -> Void) = { _ in }
 
     var onResultTapped: ((ResultDTO?) -> Void) = { _ in }

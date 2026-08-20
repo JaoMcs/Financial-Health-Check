@@ -11,6 +11,7 @@ import Combine
 /// this screen makes no request of its own (see `NETWORKING.md`).
 @MainActor
 final class ResultViewModel: ObservableObject {
+    // MARK: - Dependencies
     private let repository: HealthCheckRepositoring
     private let result: ResultDTO?
 
@@ -19,8 +20,9 @@ final class ResultViewModel: ObservableObject {
     /// `StartViewModel`/`QuestionaryViewModel` in case that changes.
     @Published var state: ViewState = .content
 
+    /// Called when the user taps "Finish". Set by `ResultCoordinator` — empty for now.
     var onFinishTapped: (() -> Void) = { }
-
+    /// Called when the user taps "Retake", after `retake()` has already deleted the session.
     var onRetakeTapped: (() -> Void) = { }
 
     init(repository: HealthCheckRepositoring, result: ResultDTO?) {

@@ -10,6 +10,7 @@ import Combine
 /// `StartView`'s view model.
 @MainActor
 final class StartViewModel: ObservableObject {
+    // MARK: - Dependence
     private let repository: HealthCheckRepositoring
 
     @Published var session: HealthCheckSessionDTO?
@@ -18,7 +19,6 @@ final class StartViewModel: ObservableObject {
     @Published var state: ViewState = .content
 
     /// Called when the user taps "Start", with the session `startSession()` resolved. Set by
-    /// `StartCoordinator` — empty for now.
     var onStartTapped: ((HealthCheckSessionDTO?) -> Void) = { _ in }
 
     init(repository: HealthCheckRepositoring) {
