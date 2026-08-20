@@ -7,6 +7,27 @@
 
 import SwiftUI
 
+/// Layout values shared by every `CheckboxListItem` state (Figma).
+///
+/// Usage: `.padding(.leading, CheckboxListItemConstants.iconLeadingPadding)`.
+enum CheckboxListItemConstants {
+    /// Corner radius of the item's background/border.
+    static let cornerRadius: CGFloat = 16
+    /// Width and height the checkbox icon is resized to.
+    static let iconSize: CGFloat = 24
+    /// The icon's leading padding, and the item's own trailing padding.
+    static let iconLeadingPadding: CGFloat = Spacing.xl
+    /// The icon's top/bottom padding.
+    static let iconVerticalPadding: CGFloat = Spacing.twoXl
+    /// The icon's trailing padding — the gap between it and the label. Not specified in
+    /// Figma — reuses `RadioButtonListItem`'s icon/label gap.
+    static let iconLabelGap: CGFloat = Spacing.md
+    /// Border width while unchecked.
+    static let borderWidth: CGFloat = 1
+    /// Border width while checked.
+    static let checkedBorderWidth: CGFloat = 2
+}
+
 /// The design system's single checkbox list item component (Figma): a rounded, tappable row
 /// with a 24x24 checkbox icon and a label. Similar to `RadioButtonListItem`, but for
 /// multiple selections instead of one — see `CheckboxList`.
@@ -35,11 +56,11 @@ struct CheckboxListItem: View {
             HStack(spacing: 0) {
                 (isChecked ? Icon.checkboxSelected : Icon.checkboxNotSelected)
                     .resizable()
-                    .frame(width: CheckboxListItemMetrics.iconSize, height: CheckboxListItemMetrics.iconSize)
-                    .padding(.leading, CheckboxListItemMetrics.iconLeadingPadding)
-                    .padding(.top, CheckboxListItemMetrics.iconVerticalPadding)
-                    .padding(.bottom, CheckboxListItemMetrics.iconVerticalPadding)
-                    .padding(.trailing, CheckboxListItemMetrics.iconLabelGap)
+                    .frame(width: CheckboxListItemConstants.iconSize, height: CheckboxListItemConstants.iconSize)
+                    .padding(.leading, CheckboxListItemConstants.iconLeadingPadding)
+                    .padding(.top, CheckboxListItemConstants.iconVerticalPadding)
+                    .padding(.bottom, CheckboxListItemConstants.iconVerticalPadding)
+                    .padding(.trailing, CheckboxListItemConstants.iconLabelGap)
 
                 Text(label)
                     .typography(Typography.Body.MD.medium)
@@ -48,7 +69,7 @@ struct CheckboxListItem: View {
 
                 Spacer(minLength: 0)
             }
-            .padding(.trailing, CheckboxListItemMetrics.iconLeadingPadding)
+            .padding(.trailing, CheckboxListItemConstants.iconLeadingPadding)
             .frame(maxWidth: .infinity)
             .background(
                 isChecked
@@ -56,15 +77,15 @@ struct CheckboxListItem: View {
                     : DesignSystemColor.BackgroundAndSurface.surface
             )
             .overlay(
-                RoundedRectangle(cornerRadius: CheckboxListItemMetrics.cornerRadius)
+                RoundedRectangle(cornerRadius: CheckboxListItemConstants.cornerRadius)
                     .strokeBorder(
                         isChecked ? DesignSystemColor.Status.selected : DesignSystemColor.BorderAndIcon.border,
                         lineWidth: isChecked
-                            ? CheckboxListItemMetrics.checkedBorderWidth
-                            : CheckboxListItemMetrics.borderWidth
+                            ? CheckboxListItemConstants.checkedBorderWidth
+                            : CheckboxListItemConstants.borderWidth
                     )
             )
-            .clipShape(RoundedRectangle(cornerRadius: CheckboxListItemMetrics.cornerRadius))
+            .clipShape(RoundedRectangle(cornerRadius: CheckboxListItemConstants.cornerRadius))
         }
         .buttonStyle(.plain)
     }

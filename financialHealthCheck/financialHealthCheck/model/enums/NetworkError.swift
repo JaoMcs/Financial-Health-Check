@@ -56,7 +56,8 @@ extension NetworkError: Equatable {
             return true
         case let (.validationError(lField, lMessage), .validationError(rField, rMessage)):
             return lField == rField && lMessage == rMessage
-        case let (.unrecognizedServerError(lStatus, lCode, lMessage), .unrecognizedServerError(rStatus, rCode, rMessage)):
+        case let (.unrecognizedServerError(lStatus, lCode, lMessage),
+            .unrecognizedServerError(rStatus, rCode, rMessage)):
             return lStatus == rStatus && lCode == rCode && lMessage == rMessage
         default:
             return false

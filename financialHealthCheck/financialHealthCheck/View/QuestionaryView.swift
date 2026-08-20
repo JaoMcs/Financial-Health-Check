@@ -7,17 +7,6 @@
 
 import SwiftUI
 
-/// Which selection component `QuestionaryView` renders below its header, mirroring
-/// `QuestionType`.
-enum QuestionaryContent {
-    /// `.singleChoice` — a `RadioButtonList` over `options`.
-    case singleChoice(options: [String])
-    /// `.multipleChoice` — a `CheckboxList` over `options`.
-    case multipleChoice(options: [String])
-    /// `.number` — a single `AppTextField`.
-    case number
-}
-
 /// A question screen: a `ScreenHeader`, one of `QuestionaryContent`'s selection components,
 /// and a "Continue" button pinned to the bottom edge.
 struct QuestionaryView: View {
@@ -53,10 +42,7 @@ struct QuestionaryView: View {
                 isLoading: viewModel.state.isLoading,
                 action: viewModel.continueTapped
             )
-            .disabled(viewModel.state.isLoading ||
-                      !viewModel.isAnswerSelected ||
-                      viewModel.isNumberInvalid ||
-                      viewModel.isMultipleSelectionInvalid)
+            .disabled(viewModel.isContinueDisabled)
             .padding(.horizontal, Spacing.twoXl)
         }
     }

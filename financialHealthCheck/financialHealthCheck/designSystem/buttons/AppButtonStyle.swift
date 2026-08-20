@@ -41,22 +41,22 @@ private struct AppButtonBody: View {
             .typography(Typography.Body.MD.medium)
             .foregroundStyle(colors.foreground)
             .lineLimit(1)
-            .padding(.horizontal, AppButtonMetrics.horizontalPadding)
-            .frame(maxWidth: .infinity, minHeight: AppButtonMetrics.height)
+            .padding(.horizontal, AppButtonConstants.horizontalPadding)
+            .frame(maxWidth: .infinity, minHeight: AppButtonConstants.height)
             .background(colors.background)
             .overlay(
                 Capsule()
-                    .strokeBorder(colors.border, lineWidth: AppButtonMetrics.borderWidth)
+                    .strokeBorder(colors.border, lineWidth: AppButtonConstants.borderWidth)
             )
             .clipShape(Capsule())
             .opacity(opacity)
-            .animation(.easeOut(duration: AppButtonMetrics.pressAnimationDuration), value: configuration.isPressed)
+            .animation(.easeOut(duration: AppButtonConstants.pressAnimationDuration), value: configuration.isPressed)
     }
 
     /// Full opacity unless disabled (`disabledOpacity`) or, while enabled, mid-press
     /// (`pressedOpacity`).
     private var opacity: Double {
-        guard isEnabled else { return AppButtonMetrics.disabledOpacity }
-        return configuration.isPressed ? AppButtonMetrics.pressedOpacity : 1
+        guard isEnabled else { return AppButtonConstants.disabledOpacity }
+        return configuration.isPressed ? AppButtonConstants.pressedOpacity : 1
     }
 }

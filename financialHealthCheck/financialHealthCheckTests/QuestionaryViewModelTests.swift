@@ -250,6 +250,49 @@ final class QuestionaryViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.isMultipleSelectionInvalid)
     }
 
+    // MARK: - isContinueDisabled
+
+    func testIsContinueDisabled_whenLoading_returnsTrue() {
+        let options = [Fixtures.option(id: "opt-a", title: "A")]
+        let session = Fixtures.session(question: Fixtures.singleChoiceQuestion(options: options))
+        let viewModel = QuestionaryViewModel(repository: MockHealthCheckRepository(), session: session)
+        viewModel.singleSelection = "A"
+        viewModel.state = .loading
+
+        XCTAssertTrue(viewModel.isContinueDisabled)
+    }
+
+    func testIsContinueDisabled_whenNothingSelected_returnsTrue() {
+        let viewModel = QuestionaryViewModel(repository: MockHealthCheckRepository(), session: nil)
+
+        XCTAssertTrue(viewModel.isContinueDisabled)
+    }
+
+    func testIsContinueDisabled_whenNumberInvalid_returnsTrue() {
+        let session = Fixtures.session(question: Fixtures.numberQuestion(min: 0, max: 10))
+        let viewModel = QuestionaryViewModel(repository: MockHealthCheckRepository(), session: session)
+        viewModel.numberText = "abc"
+
+        XCTAssertTrue(viewModel.isContinueDisabled)
+    }
+
+    func testIsContinueDisabled_whenMultipleSelectionInvalid_returnsTrue() {
+        let session = Fixtures.session(question: Fixtures.multipleChoiceQuestion(minSelections: 2, maxSelections: 3))
+        let viewModel = QuestionaryViewModel(repository: MockHealthCheckRepository(), session: session)
+        viewModel.multipleSelections = ["A"]
+
+        XCTAssertTrue(viewModel.isContinueDisabled)
+    }
+
+    func testIsContinueDisabled_whenValidAndNotLoading_returnsFalse() {
+        let options = [Fixtures.option(id: "opt-a", title: "A")]
+        let session = Fixtures.session(question: Fixtures.singleChoiceQuestion(options: options))
+        let viewModel = QuestionaryViewModel(repository: MockHealthCheckRepository(), session: session)
+        viewModel.singleSelection = "A"
+
+        XCTAssertFalse(viewModel.isContinueDisabled)
+    }
+
     // MARK: - updateMultipleSelections
 
     func testUpdateMultipleSelections_whenWithinMax_applies() {

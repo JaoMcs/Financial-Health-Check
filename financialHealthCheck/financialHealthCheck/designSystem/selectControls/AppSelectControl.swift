@@ -7,6 +7,26 @@
 
 import SwiftUI
 
+/// Layout values shared by every `AppSelectControl` state (Figma).
+///
+/// Usage: `.padding(.horizontal, AppSelectControlConstants.horizontalPadding)`.
+enum AppSelectControlConstants {
+    /// Corner radius of the trigger and of the options list as a whole.
+    static let cornerRadius: CGFloat = 16
+    /// Leading/trailing padding between the trigger's content and its edge, and between an
+    /// option row's content and its edge.
+    static let horizontalPadding: CGFloat = Spacing.lg
+    /// Top/bottom padding for the trigger and for each option row. Not specified in Figma —
+    /// reuses `AppTextField`'s vertical padding to keep both controls the same height.
+    static let verticalPadding: CGFloat = Spacing.md
+    /// Border width for the trigger's default and error states.
+    static let borderWidth: CGFloat = 1
+    /// Border width for the trigger once it's open or in its error state.
+    static let openOrErrorBorderWidth: CGFloat = 2
+    /// Gap between the trigger and the options list once open.
+    static let optionsGap: CGFloat = Spacing.xs
+}
+
 /// Reports the trigger's rendered height up to `AppSelectControl`, so it can offset the
 /// options overlay to sit exactly below it without reserving that space in the layout.
 private struct TriggerHeightPreferenceKey: PreferenceKey {
@@ -68,8 +88,8 @@ struct AppSelectControl: View {
     /// The trigger's border width: thicker while open or in error, otherwise the default.
     private var borderWidth: CGFloat {
         isOpen || isError
-            ? AppSelectControlMetrics.openOrErrorBorderWidth
-            : AppSelectControlMetrics.borderWidth
+            ? AppSelectControlConstants.openOrErrorBorderWidth
+            : AppSelectControlConstants.borderWidth
     }
 
     var body: some View {
@@ -77,7 +97,7 @@ struct AppSelectControl: View {
             .overlay(alignment: .top) {
                 if isOpen {
                     optionsList
-                        .offset(y: triggerHeight + AppSelectControlMetrics.optionsGap)
+                        .offset(y: triggerHeight + AppSelectControlConstants.optionsGap)
                 }
             }
             .zIndex(isOpen ? 1 : 0)
@@ -87,7 +107,7 @@ struct AppSelectControl: View {
         Button {
             isOpen.toggle()
         } label: {
-            HStack(spacing: AppSelectControlMetrics.horizontalPadding) {
+            HStack(spacing: AppSelectControlConstants.horizontalPadding) {
                 Text(selection ?? placeholder)
                     .typography(Typography.Body.LG.regular)
                     .foregroundStyle(
@@ -102,15 +122,15 @@ struct AppSelectControl: View {
                 (isOpen ? Icon.chevronTopSmall : Icon.chevronDownSmall)
                     .foregroundStyle(DesignSystemColor.BorderAndIcon.iconSecondary)
             }
-            .padding(.horizontal, AppSelectControlMetrics.horizontalPadding)
-            .padding(.vertical, AppSelectControlMetrics.verticalPadding)
+            .padding(.horizontal, AppSelectControlConstants.horizontalPadding)
+            .padding(.vertical, AppSelectControlConstants.verticalPadding)
             .frame(maxWidth: .infinity)
             .background(DesignSystemColor.BackgroundAndSurface.surface)
             .overlay(
-                RoundedRectangle(cornerRadius: AppSelectControlMetrics.cornerRadius)
+                RoundedRectangle(cornerRadius: AppSelectControlConstants.cornerRadius)
                     .strokeBorder(borderColor, lineWidth: borderWidth)
             )
-            .clipShape(RoundedRectangle(cornerRadius: AppSelectControlMetrics.cornerRadius))
+            .clipShape(RoundedRectangle(cornerRadius: AppSelectControlConstants.cornerRadius))
         }
         .buttonStyle(.plain)
         .background(
@@ -128,10 +148,10 @@ struct AppSelectControl: View {
             }
         }
         .overlay(
-            RoundedRectangle(cornerRadius: AppSelectControlMetrics.cornerRadius)
-                .strokeBorder(DesignSystemColor.BorderAndIcon.border, lineWidth: AppSelectControlMetrics.borderWidth)
+            RoundedRectangle(cornerRadius: AppSelectControlConstants.cornerRadius)
+                .strokeBorder(DesignSystemColor.BorderAndIcon.border, lineWidth: AppSelectControlConstants.borderWidth)
         )
-        .clipShape(RoundedRectangle(cornerRadius: AppSelectControlMetrics.cornerRadius))
+        .clipShape(RoundedRectangle(cornerRadius: AppSelectControlConstants.cornerRadius))
     }
 
     /// One row of `optionsList`: tapping it selects `option`, or clears `selection` if
@@ -156,8 +176,8 @@ struct AppSelectControl: View {
 
                 Spacer(minLength: 0)
             }
-            .padding(.horizontal, AppSelectControlMetrics.horizontalPadding)
-            .padding(.vertical, AppSelectControlMetrics.verticalPadding)
+            .padding(.horizontal, AppSelectControlConstants.horizontalPadding)
+            .padding(.vertical, AppSelectControlConstants.verticalPadding)
             .frame(maxWidth: .infinity)
             .background(
                 option == selection

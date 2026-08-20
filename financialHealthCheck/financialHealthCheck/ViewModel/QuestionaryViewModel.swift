@@ -110,6 +110,12 @@ final class QuestionaryViewModel: ObservableObject {
         return false
     }
 
+    /// Whether "Continue" should be disabled: a request is already in flight, nothing's been
+    /// selected/entered yet, or the current selection fails its question's own validation.
+    var isContinueDisabled: Bool {
+        state.isLoading || !isAnswerSelected || isNumberInvalid || isMultipleSelectionInvalid
+    }
+
     /// Applies `newSelections` from `CheckboxList`, ignoring it if it would check an option
     /// past `validation.maxSelections` — unlike `minSelections`, which can only be enforced
     /// once the user tries to continue, a maximum can be enforced right at selection time.

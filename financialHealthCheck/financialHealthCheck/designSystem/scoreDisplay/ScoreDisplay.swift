@@ -7,6 +7,16 @@
 
 import SwiftUI
 
+/// Layout values for `ScoreDisplay` (Figma).
+///
+/// Usage: `.frame(width: ScoreDisplayConstants.size, height: ScoreDisplayConstants.size)`.
+enum ScoreDisplayConstants {
+    /// Width and height of the ring.
+    static let size: CGFloat = 240
+    /// Thickness of the ring's stroke.
+    static let lineWidth: CGFloat = 24
+}
+
 /// The design system's circular score ring (Figma): a 240x240 ring, filled clockwise from the
 /// top to reflect `score` out of `maxScore`, with the score and "/`maxScore`" centered inside.
 /// Same `Circle().trim(from:to:).rotationEffect(-90°)` technique as the article cited in the
@@ -19,9 +29,6 @@ import SwiftUI
 ///
 /// Usage: `ScoreDisplay(score: 78, maxScore: 100)`.
 struct ScoreDisplay: View {
-    private static let size: CGFloat = 240
-    private static let lineWidth: CGFloat = 24
-
     let score: Int
     let maxScore: Int
 
@@ -49,11 +56,11 @@ struct ScoreDisplay: View {
                     .foregroundStyle(DesignSystemColor.Text.secondary)
             }
         }
-        .frame(width: Self.size, height: Self.size)
+        .frame(width: ScoreDisplayConstants.size, height: ScoreDisplayConstants.size)
     }
 
     private var strokeStyle: StrokeStyle {
-        StrokeStyle(lineWidth: Self.lineWidth, lineCap: .square)
+        StrokeStyle(lineWidth: ScoreDisplayConstants.lineWidth, lineCap: .square)
     }
 }
 

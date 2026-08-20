@@ -7,6 +7,30 @@
 
 import SwiftUI
 
+/// Layout values shared by every `ListItem` configuration (Figma).
+///
+/// Usage: `.padding(.trailing, ListItemConstants.rowTrailingPadding)`.
+enum ListItemConstants {
+    /// The label/description column's leading padding, used only when there's no
+    /// `leadingIcon` (the icon supplies the row's leading edge itself otherwise).
+    static let contentLeadingPadding: CGFloat = Spacing.lg
+    /// The label/description column's top/bottom padding. Not part of the spacing scale —
+    /// Figma specifies 17pt exactly.
+    static let contentVerticalPadding: CGFloat = 17
+    /// The label/description column's trailing padding — the minimum gap to `accessory`.
+    static let contentAccessoryGap: CGFloat = Spacing.md
+    /// The row's own trailing padding, from `accessory` to the row's edge.
+    static let rowTrailingPadding: CGFloat = Spacing.lg
+    /// Width and height the trailing chevron is resized to.
+    static let chevronSize: CGFloat = 24
+    /// Width and height `leadingIcon` is resized to.
+    static let leadingIconSize: CGFloat = 40
+    /// `leadingIcon`'s own leading padding.
+    static let leadingIconLeadingPadding: CGFloat = Spacing.lg
+    /// `leadingIcon`'s own trailing padding — the gap to the label/description column.
+    static let leadingIconTrailingPadding: CGFloat = Spacing.md
+}
+
 /// What `ListItem` shows on its trailing edge.
 ///
 /// Usage: `.chevron` for a navigation row, `.money("120.00")` for a row that ends in a
@@ -56,9 +80,9 @@ struct ListItem: View {
                 if let leadingIcon {
                     leadingIcon
                         .resizable()
-                        .frame(width: ListItemMetrics.leadingIconSize, height: ListItemMetrics.leadingIconSize)
-                        .padding(.leading, ListItemMetrics.leadingIconLeadingPadding)
-                        .padding(.trailing, ListItemMetrics.leadingIconTrailingPadding)
+                        .frame(width: ListItemConstants.leadingIconSize, height: ListItemConstants.leadingIconSize)
+                        .padding(.leading, ListItemConstants.leadingIconLeadingPadding)
+                        .padding(.trailing, ListItemConstants.leadingIconTrailingPadding)
                 }
 
                 VStack(alignment: .leading, spacing: 0) {
@@ -74,9 +98,9 @@ struct ListItem: View {
                             .lineLimit(1)
                     }
                 }
-                .padding(.leading, leadingIcon == nil ? ListItemMetrics.contentLeadingPadding : 0)
-                .padding(.vertical, ListItemMetrics.contentVerticalPadding)
-                .padding(.trailing, ListItemMetrics.contentAccessoryGap)
+                .padding(.leading, leadingIcon == nil ? ListItemConstants.contentLeadingPadding : 0)
+                .padding(.vertical, ListItemConstants.contentVerticalPadding)
+                .padding(.trailing, ListItemConstants.contentAccessoryGap)
 
                 Spacer(minLength: 0)
 
@@ -84,7 +108,7 @@ struct ListItem: View {
                 case .chevron:
                         Icon.chevronRightSmall
                         .resizable()
-                        .frame(width: ListItemMetrics.chevronSize, height: ListItemMetrics.chevronSize)
+                        .frame(width: ListItemConstants.chevronSize, height: ListItemConstants.chevronSize)
                         .foregroundStyle(DesignSystemColor.BorderAndIcon.iconSecondary)
 
                 case .money(let amount):
@@ -93,7 +117,7 @@ struct ListItem: View {
                         .foregroundStyle(DesignSystemColor.Text.secondary)
                 }
             }
-            .padding(.trailing, ListItemMetrics.rowTrailingPadding)
+            .padding(.trailing, ListItemConstants.rowTrailingPadding)
             .frame(maxWidth: .infinity)
         }
         .buttonStyle(.plain)

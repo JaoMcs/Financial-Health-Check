@@ -18,20 +18,18 @@ struct RestoringSessionView: View {
         VStack(spacing: 0) {
             Spacer()
 
-            VStack(spacing: 0) {
+            VStack(spacing: Spacing.threeXl) {
                 ZStack {
                     Icon.iconBackground
                     ProgressView()
                         .tint(DesignSystemColor.BackgroundAndSurface.surface)
                 }
-                .padding(.bottom, Spacing.threeXl)
 
                 ScreenHeader(
                     caption: nil,
                     title: Strings.RestoringSession.title,
                     description: Strings.RestoringSession.description
                 )
-                .padding()
             }
 
             Spacer()

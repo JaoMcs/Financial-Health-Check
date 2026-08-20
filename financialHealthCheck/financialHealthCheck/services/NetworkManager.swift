@@ -7,15 +7,6 @@
 
 import Foundation
 
-/// The HTTP method a `NetworkManager` request is sent with.
-enum HTTPMethod: String {
-    case get = "GET"
-    case post = "POST"
-    case put = "PUT"
-    case patch = "PATCH"
-    case delete = "DELETE"
-}
-
 /// Generic HTTP transport for the app — encodes a request body and decodes a response,
 /// knowing nothing about the health-check domain. `HealthCheckRepository` is the only thing
 /// that calls this directly (see `NETWORKING.md`).

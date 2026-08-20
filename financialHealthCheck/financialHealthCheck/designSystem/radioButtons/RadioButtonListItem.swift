@@ -7,6 +7,22 @@
 
 import SwiftUI
 
+/// Layout values shared by every `RadioButtonListItem` state (Figma).
+///
+/// Usage: `.padding(.leading, RadioButtonListItemConstants.edgePadding)`.
+enum RadioButtonListItemConstants {
+    /// Corner radius of the item's background/border.
+    static let cornerRadius: CGFloat = 16
+    /// The icon's top/leading/bottom padding, and the item's own trailing padding.
+    static let edgePadding: CGFloat = Spacing.xl
+    /// The icon's trailing padding — the gap between it and the label.
+    static let iconLabelGap: CGFloat = Spacing.md
+    /// Border width while unselected.
+    static let borderWidth: CGFloat = 1
+    /// Border width while selected.
+    static let selectedBorderWidth: CGFloat = 2
+}
+
 /// The design system's single radio list item component (Figma): a rounded, tappable row
 /// with a radio icon and a label.
 ///
@@ -33,10 +49,10 @@ struct RadioButtonListItem: View {
         Button(action: action) {
             HStack(spacing: 0) {
                 (isSelected ? Icon.radioSelected : Icon.radioNotSelected)
-                    .padding(.top, RadioButtonListItemMetrics.edgePadding)
-                    .padding(.leading, RadioButtonListItemMetrics.edgePadding)
-                    .padding(.bottom, RadioButtonListItemMetrics.edgePadding)
-                    .padding(.trailing, RadioButtonListItemMetrics.iconLabelGap)
+                    .padding(.top, RadioButtonListItemConstants.edgePadding)
+                    .padding(.leading, RadioButtonListItemConstants.edgePadding)
+                    .padding(.bottom, RadioButtonListItemConstants.edgePadding)
+                    .padding(.trailing, RadioButtonListItemConstants.iconLabelGap)
 
                 Text(label)
                     .typography(Typography.Body.MD.medium)
@@ -45,7 +61,7 @@ struct RadioButtonListItem: View {
 
                 Spacer(minLength: 0)
             }
-            .padding(.trailing, RadioButtonListItemMetrics.edgePadding)
+            .padding(.trailing, RadioButtonListItemConstants.edgePadding)
             .frame(maxWidth: .infinity)
             .background(
                 isSelected
@@ -53,15 +69,15 @@ struct RadioButtonListItem: View {
                     : DesignSystemColor.BackgroundAndSurface.surface
             )
             .overlay(
-                RoundedRectangle(cornerRadius: RadioButtonListItemMetrics.cornerRadius)
+                RoundedRectangle(cornerRadius: RadioButtonListItemConstants.cornerRadius)
                     .strokeBorder(
                         isSelected ? DesignSystemColor.Status.selected : DesignSystemColor.BorderAndIcon.border,
                         lineWidth: isSelected
-                            ? RadioButtonListItemMetrics.selectedBorderWidth
-                            : RadioButtonListItemMetrics.borderWidth
+                            ? RadioButtonListItemConstants.selectedBorderWidth
+                            : RadioButtonListItemConstants.borderWidth
                     )
             )
-            .clipShape(RoundedRectangle(cornerRadius: RadioButtonListItemMetrics.cornerRadius))
+            .clipShape(RoundedRectangle(cornerRadius: RadioButtonListItemConstants.cornerRadius))
         }
         .buttonStyle(.plain)
     }

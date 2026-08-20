@@ -136,19 +136,26 @@ Financial-Health-Check/
         │   ├── HealthCheckSessionDTO.swift   Shared response shape for both endpoints.
         │   ├── QuestionDTO.swift
         │   ├── QuestionOptionDTO.swift
-        │   ├── QuestionType.swift        `single_choice` / `multiple_choice` / `number`.
         │   ├── QuestionValidationDTO.swift
         │   ├── ProgressDTO.swift
         │   ├── ResultDTO.swift
-        │   ├── ResultCategory.swift      `poor` / `fair` / `good` / `excellent`.
-        │   ├── AnswerValue.swift         Custom-encoded answer (string, array, or number).
         │   ├── SubmitAnswerRequestDTO.swift
-        │   └── APIErrorDTO.swift         Decoded from non-2xx responses.
+        │   ├── APIErrorDTO.swift         Decoded from non-2xx responses.
+        │   └── enums/                    Every case-based enum outside `designSystem/`, kept in
+        │       │                          one place regardless of which layer defines it.
+        │       ├── QuestionType.swift        `single_choice` / `multiple_choice` / `number`.
+        │       ├── ResultCategory.swift      `poor` / `fair` / `good` / `excellent`.
+        │       ├── AnswerValue.swift         Custom-encoded answer (string, array, or number).
+        │       ├── ViewState.swift           Drives a screen's loading/content/error rendering.
+        │       ├── NetworkError.swift        Typed errors, mapped from the API's error codes.
+        │       ├── HTTPMethod.swift          `NetworkManager`'s request verb.
+        │       ├── SplashDestination.swift   `AppCoordinator`'s routing target.
+        │       ├── QuestionaryContent.swift  `QuestionaryView`'s selection-component kind.
+        │       └── ErrorViewKind.swift       `ErrorView`'s presentation kind.
         │
         ├── services/                    Generic infrastructure — no domain knowledge.
         │   ├── NetworkManager.swift      Generic HTTP transport (encode/decode/validate).
         │   ├── Endpoint.swift            URL base + path segments.
-        │   ├── NetworkError.swift        Typed errors, mapped from the API's error codes.
         │   └── KeychainManager.swift     Persists the session id; the only Keychain access.
         │
         ├── repositories/                Domain operations — the only thing ViewModels use.
@@ -176,7 +183,7 @@ Financial-Health-Check/
             ├── typographyScale/          `Typography`, `TypographyToken`, UIKit/SwiftUI bridges.
             ├── spacingScale/             `Spacing`.
             ├── icons/                    `Icon`.
-            ├── buttons/                  `AppButton`, `ButtonDock`, styling/metrics.
+            ├── buttons/                  `AppButton`, `ButtonDock`, styling/constants.
             ├── textFields/               `AppTextField`.
             ├── selectControls/           `AppSelectControl`.
             ├── radioButtons/             `RadioButtonListItem` (single choice).

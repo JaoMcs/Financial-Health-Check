@@ -8,6 +8,28 @@
 import SwiftUI
 import UIKit
 
+/// Layout values shared by every `AppTextField` configuration (Figma).
+///
+/// Usage: `.padding(.horizontal, AppTextFieldConstants.horizontalPadding)`.
+enum AppTextFieldConstants {
+    /// Corner radius of the field's background/border.
+    static let cornerRadius: CGFloat = 16
+    /// Leading/trailing padding between the field's content and its edge.
+    static let horizontalPadding: CGFloat = Spacing.lg
+    /// Top/bottom padding between the field's content and its edge. Not specified in Figma —
+    /// chosen to keep the field comfortably tall next to `horizontalPadding`.
+    static let verticalPadding: CGFloat = Spacing.md
+    /// Border width for the default state.
+    static let borderWidth: CGFloat = 1
+    /// Border width once the field has an `errorMessage`.
+    static let errorBorderWidth: CGFloat = 2
+    /// Gap between the field and its `label` (above) or `errorMessage` (below).
+    static let labelGap: CGFloat = Spacing.xs
+    /// Gap between an optional `prefix` and the input text. Not specified in Figma — reuses
+    /// the same gap `AppButton` uses between an icon and its label.
+    static let prefixGap: CGFloat = Spacing.sm
+}
+
 /// The design system's single text field component (Figma): white, rounded, single-line
 /// input with `Body/LG` typography — `Text.secondary` while showing the placeholder,
 /// `Text.primary` once there's real input.
@@ -48,7 +70,7 @@ struct AppTextField: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack(spacing: AppTextFieldMetrics.prefixGap) {
+            HStack(spacing: AppTextFieldConstants.prefixGap) {
                 if let prefix {
                     Text(prefix)
                         .typography(Typography.Body.LG.regular)
@@ -68,24 +90,24 @@ struct AppTextField: View {
                 .textFieldStyle(.plain)
                 .keyboardType(keyboardType)
             }
-            .padding(.horizontal, AppTextFieldMetrics.horizontalPadding)
-            .padding(.vertical, AppTextFieldMetrics.verticalPadding)
+            .padding(.horizontal, AppTextFieldConstants.horizontalPadding)
+            .padding(.vertical, AppTextFieldConstants.verticalPadding)
             .frame(maxWidth: .infinity)
             .background(DesignSystemColor.BackgroundAndSurface.surface)
             .overlay(
-                RoundedRectangle(cornerRadius: AppTextFieldMetrics.cornerRadius)
+                RoundedRectangle(cornerRadius: AppTextFieldConstants.cornerRadius)
                     .strokeBorder(
                         isError ? DesignSystemColor.Status.error : DesignSystemColor.BorderAndIcon.border,
-                        lineWidth: isError ? AppTextFieldMetrics.errorBorderWidth : AppTextFieldMetrics.borderWidth
+                        lineWidth: isError ? AppTextFieldConstants.errorBorderWidth : AppTextFieldConstants.borderWidth
                     )
             )
-            .clipShape(RoundedRectangle(cornerRadius: AppTextFieldMetrics.cornerRadius))
+            .clipShape(RoundedRectangle(cornerRadius: AppTextFieldConstants.cornerRadius))
 
             if let message {
                 Text(message)
                     .typography(Typography.Body.SM.regular)
                     .foregroundStyle(isError ? DesignSystemColor.Status.error : DesignSystemColor.Text.secondary)
-                    .padding(.top, AppTextFieldMetrics.labelGap)
+                    .padding(.top, AppTextFieldConstants.labelGap)
             }
         }
     }

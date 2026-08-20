@@ -7,6 +7,15 @@
 
 import SwiftUI
 
+/// Layout values for `ImageHeader` (Figma).
+///
+/// Usage: `.frame(width: ImageHeaderConstants.imageSize, height: ImageHeaderConstants.imageSize)`.
+enum ImageHeaderConstants {
+    /// Width and height of `.image` media. `.score` media sizes itself instead, via
+    /// `ScoreDisplayConstants.size`.
+    static let imageSize: CGFloat = 200
+}
+
 /// What `ImageHeader` shows above its title/description.
 enum ImageHeaderMedia {
     /// A 200x200 image.
@@ -61,7 +70,7 @@ struct ImageHeader: View {
             image
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(width: 200, height: 200)
+                .frame(width: ImageHeaderConstants.imageSize, height: ImageHeaderConstants.imageSize)
         case .score(let value, let maxScore):
             ScoreDisplay(score: value, maxScore: maxScore)
         }

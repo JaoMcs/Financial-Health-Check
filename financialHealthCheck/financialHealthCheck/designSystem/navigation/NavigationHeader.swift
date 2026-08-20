@@ -8,7 +8,7 @@
 import UIKit
 
 /// Layout values for `NavigationHeader`.
-enum NavigationHeaderMetrics {
+enum NavigationHeaderConstants {
     /// Width given to the title label once installed as a screen's `titleView`.
     /// `UINavigationBar` doesn't hand its title view the bar's full width, so this isn't
     /// derived from Figma — it's a starting point. Confirm it on device/simulator and adjust
@@ -44,7 +44,7 @@ enum NavigationHeader {
             alignment: .center
         )
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.widthAnchor.constraint(equalToConstant: NavigationHeaderMetrics.width).isActive = true
+        titleLabel.widthAnchor.constraint(equalToConstant: NavigationHeaderConstants.width).isActive = true
         viewController.navigationItem.titleView = titleLabel
 
         let progressBarView = NavigationProgressBarView()
@@ -58,7 +58,7 @@ enum NavigationHeader {
             progressBarView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
             progressBarView.topAnchor.constraint(equalTo: safeArea.topAnchor),
             progressBarView.heightAnchor.constraint(
-                equalToConstant: total > 0 ? NavigationProgressBarMetrics.height : 0
+                equalToConstant: total > 0 ? NavigationProgressBarConstants.height : 0
             )
         ])
     }

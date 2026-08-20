@@ -9,10 +9,12 @@ import UIKit
 
 /// Layout values for `NavigationProgressBarView`. Not specified in Figma beyond the colors —
 /// `height` is a small, reasonable pick and may need tuning once seen on device.
-enum NavigationProgressBarMetrics {
+enum NavigationProgressBarConstants {
     /// The view's height. Also its corner radius (half of it, on both the track and the
     /// fill), so both ends stay rounded.
     static let height: CGFloat = 4
+    /// Duration of the fill's slide animation when `setProgress(current:total:)` changes it.
+    static let animationDuration: TimeInterval = 0.3
 }
 
 /// The design system's navigation progress bar (Figma): `Primary.primary` (`#6334FF`) filling
@@ -55,7 +57,7 @@ final class NavigationProgressBarView: UIView {
         self.current = min(max(current, 0), self.total)
 
         setNeedsLayout()
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: NavigationProgressBarConstants.animationDuration) {
             self.layoutIfNeeded()
         }
     }

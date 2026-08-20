@@ -23,8 +23,8 @@ final class QuestionCoordinator: Coordinator {
     private var childCoordinators: [Coordinator] = []
 
     init(navigationController: UINavigationController,
-        repository: HealthCheckRepositoring,
-        session: HealthCheckSessionDTO?) {
+         repository: HealthCheckRepositoring,
+         session: HealthCheckSessionDTO?) {
         self.navigationController = navigationController
         self.repository = repository
         self.session = session
