@@ -506,4 +506,18 @@ final class QuestionaryViewModelTests: XCTestCase {
 
         XCTAssertEqual(viewModel.state, .loading)
     }
+
+    // MARK: - resetSession
+
+    func testResetSession_deletesSessionAndCallsOnSessionReset() {
+        let repository = MockHealthCheckRepository()
+        let viewModel = QuestionaryViewModel(repository: repository, session: nil)
+        var called = false
+        viewModel.onSessionReset = { called = true }
+
+        viewModel.resetSession()
+
+        XCTAssertEqual(repository.deleteSessionCallCount, 1)
+        XCTAssertTrue(called)
+    }
 }

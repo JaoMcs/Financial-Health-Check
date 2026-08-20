@@ -86,9 +86,13 @@ fully hardened, and are called out here instead of being silently shipped:
   an `isLoading` state yet, so a fast double-tap (or a tap during network latency) can fire the
   same request twice. Traded off against the scope of a take-home assignment; a real app would
   need this.
-- **Back button during the question flow isn't disabled** — the user can navigate back to an
-  already-answered question. The API doesn't allow re-answering a completed question, so
-  resubmitting currently fails silently instead of surfacing an error or locking the screen.
+- **Back button during the question flow isn't disabled** — the user can still navigate back to
+  an already-answered question and tap "Continue" again. The API rejects that resubmission
+  (confirmed live: `400 INVALID_QUESTION`) — the app now surfaces it clearly instead of failing
+  silently, with a message that doesn't claim the session is lost, and a "Start a new check"
+  action that actually deletes the session and returns to Start
+  (`QuestionaryViewModel.resetSession()`). The back button itself still isn't disabled, so the
+  user can still reach this error — only what happens once they do is fixed.
 - **"Finish" on the Result screen has no defined behavior** — unlike "Retake" (clears the
   session, returns to Start), there's no product spec for what completing the flow for good
   should do, so it's currently a no-op.
@@ -109,6 +113,13 @@ fully hardened, and are called out here instead of being silently shipped:
   properly (tying a coordinator's lifetime to its own screen, or resetting from whichever
   coordinator owns the top of the chain) was judged not worth the added complexity for a
   take-home of this size.
+- **Every type is documented with `///` doc comments, even small/internal ones** — a deliberate
+  trade-off in the other direction: it makes the codebase more verbose and adds work at write
+  time (every `struct`/`class`/`enum`/`protocol` needs a description, and non-obvious functions
+  need their own comment). Chosen anyway because a take-home is read and evaluated by someone who
+  didn't write it and has no other context — the same reasoning applies to any developer picking
+  up this codebase later for maintenance, so the extra upfront cost buys faster ramp-up and fewer
+  "why does this exist" questions down the line.
 
 ## Significant Libraries/Dependencies
 

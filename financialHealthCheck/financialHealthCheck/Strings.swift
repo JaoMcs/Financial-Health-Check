@@ -79,6 +79,8 @@ enum Strings {
                 return "This check is no longer available"
             case .sessionCompleted:
                 return "This check is already complete"
+            case .questionOutOfSync:
+                return "You've already answered this"
             case .rateLimited:
                 return "Too many attempts"
             case .unexpected:
@@ -99,6 +101,9 @@ enum Strings {
                 return "We couldn't find your saved session on the server. Starting again takes about two minutes."
             case .sessionCompleted:
                 return "You've already finished this health check. Start a new one to check again."
+            case .questionOutOfSync:
+                return "This question isn't part of the flow anymore — you may have gone back to " +
+                    "an earlier step. Start a new check to continue."
             case .rateLimited:
                 return "You've made too many requests in a short time. Wait a moment and try again."
             case .unexpected:
@@ -115,7 +120,7 @@ enum Strings {
         /// - Parameter kind: The `ErrorViewKind` `ErrorView` mapped its `NetworkError` to.
         static func buttonTitle(for kind: ErrorViewKind) -> String {
             switch kind {
-            case .sessionLost, .sessionCompleted:
+            case .sessionLost, .sessionCompleted, .questionOutOfSync:
                 return "Start a new check"
             case .offline, .rateLimited, .unexpected, .invalidAnswer:
                 return "Try Again"

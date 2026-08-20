@@ -35,6 +35,10 @@ final class QuestionaryViewModel: ObservableObject {
 
     var onResultTapped: ((ResultDTO?) -> Void) = { _ in }
 
+    /// Called after `resetSession()` clears the persisted session. Set by `QuestionCoordinator`
+    /// — empty for now.
+    var onSessionReset: (() -> Void) = { }
+
     var title: String {
         session?.question?.title ?? ""
     }
@@ -152,6 +156,14 @@ final class QuestionaryViewModel: ObservableObject {
         } catch {
             state = .error(error as? NetworkError ?? .unrecognizedServerError(statusCode: 0, code: nil, message: nil))
         }
+    }
+
+    /// Called when the user taps "Start a new check" on an error that means this session can't
+    /// continue (`ErrorViewKind.requiresSessionReset`) — clears the persisted session and hands
+    /// off to `onSessionReset`, mirroring `ResultViewModel.retake()`.
+    func resetSession() {
+        repository.deleteSession()
+        onSessionReset()
     }
 
     /// Maps the user's current selection to the shape the API expects — `nil` if nothing's

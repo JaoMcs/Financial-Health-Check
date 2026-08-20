@@ -17,7 +17,11 @@ struct QuestionaryView: View {
         case .loading, .content:
             contentView
         case .error(let error):
-            ErrorView(error: error, action: viewModel.continueTapped)
+            let kind = ErrorViewKind(error)
+            ErrorView(
+                error: error,
+                action: kind.requiresSessionReset ? viewModel.resetSession : viewModel.continueTapped
+            )
         }
     }
 

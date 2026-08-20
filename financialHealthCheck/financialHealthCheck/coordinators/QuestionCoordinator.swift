@@ -57,6 +57,9 @@ final class QuestionCoordinator: Coordinator {
         viewModel.onResultTapped = { [weak self] result in
             self?.goToResult(result: result)
         }
+        viewModel.onSessionReset = { [weak self] in
+            self?.goToStart()
+        }
     }
 
     private func goToNextQuestion(session: HealthCheckSessionDTO?) {
@@ -67,6 +70,17 @@ final class QuestionCoordinator: Coordinator {
         )
         childCoordinators.append(questionCoordinator)
         questionCoordinator.start()
+    }
+
+    /// Reached from `QuestionaryViewModel.resetSession()` — the session was just cleared
+    /// because the last error meant it couldn't continue (`ErrorViewKind.requiresSessionReset`).
+    private func goToStart() {
+        let startCoordinator = StartCoordinator(
+            navigationController: navigationController,
+            repository: repository
+        )
+        childCoordinators.append(startCoordinator)
+        startCoordinator.start()
     }
 
     private func goToResult(result: ResultDTO?) {

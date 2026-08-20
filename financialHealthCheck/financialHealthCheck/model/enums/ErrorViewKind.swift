@@ -14,12 +14,17 @@ import SwiftUI
 enum ErrorViewKind {
     /// `.transport` — no connectivity, or the request timed out.
     case offline
-    /// `.sessionNotFound`, `.invalidSessionId`, `.invalidQuestion`, `.questionNotFound` — the
-    /// app's local reference to where the user was doesn't match the server anymore; nothing
-    /// to do but start over.
+    /// `.sessionNotFound`, `.invalidSessionId`, `.questionNotFound` — the app's local
+    /// reference to where the user was doesn't match the server anymore; nothing to do but
+    /// start over.
     case sessionLost
     /// `.sessionAlreadyCompleted` — the session still exists, but was already finished.
     case sessionCompleted
+    /// `.invalidQuestion` — the session itself is still valid; the answer was just submitted
+    /// for a question that's no longer the current one (e.g. the user navigated back to an
+    /// already-answered question and tapped "Continue" from there). Distinct from
+    /// `.sessionLost`: nothing about the session is actually broken.
+    case questionOutOfSync
     /// `.rateLimited` — too many requests in a short time.
     case rateLimited
     /// `.invalidResponse`, `.decodingFailed`, `.methodNotAllowed`, `.unrecognizedServerError`
@@ -35,10 +40,12 @@ enum ErrorViewKind {
         switch error {
         case .transport:
             self = .offline
-        case .sessionNotFound, .invalidSessionId, .invalidQuestion, .questionNotFound:
+        case .sessionNotFound, .invalidSessionId, .questionNotFound:
             self = .sessionLost
         case .sessionAlreadyCompleted:
             self = .sessionCompleted
+        case .invalidQuestion:
+            self = .questionOutOfSync
         case .rateLimited:
             self = .rateLimited
         case .invalidResponse, .decodingFailed, .methodNotAllowed, .unrecognizedServerError:
@@ -52,10 +59,23 @@ enum ErrorViewKind {
     /// itself is gone, `Icon.iconNoInternet` for every other failure.
     var icon: Image {
         switch self {
-        case .sessionLost, .sessionCompleted:
+        case .sessionLost, .sessionCompleted, .questionOutOfSync:
             return Icon.iconNoAvailable
         case .offline, .rateLimited, .unexpected, .invalidAnswer:
             return Icon.iconNoInternet
+        }
+    }
+
+    /// Whether this kind's primary action clears the current session and starts a new one,
+    /// rather than retrying the operation that just failed. Mirrors
+    /// `Strings.Error.buttonTitle(for:)`'s own grouping — callers use this instead of matching
+    /// on `buttonTitle`'s text to decide which action to wire up.
+    var requiresSessionReset: Bool {
+        switch self {
+        case .sessionLost, .sessionCompleted, .questionOutOfSync:
+            return true
+        case .offline, .rateLimited, .unexpected, .invalidAnswer:
+            return false
         }
     }
 
