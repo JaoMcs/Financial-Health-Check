@@ -40,7 +40,6 @@ final class ResultViewModel: ObservableObject {
     }
 
     func finish() {
-        // IDK WHAT TODO
         onFinishTapped()
     }
 

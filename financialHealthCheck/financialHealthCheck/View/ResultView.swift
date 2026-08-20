@@ -12,6 +12,8 @@ import SwiftUI
 struct ResultView: View {
     @ObservedObject var viewModel: ResultViewModel
 
+    @State private var isPresented: Bool = false
+
     var body: some View {
         switch viewModel.state {
         case .loading, .content:
@@ -22,27 +24,28 @@ struct ResultView: View {
     }
 
     private var contentView: some View {
-        GeometryReader { geometry in
-            VStack(spacing: 0) {
-                ImageHeader(
-                    media: .score(value: viewModel.score, maxScore: Strings.Result.maxScore),
-                    title: viewModel.title,
-                    description: viewModel.description
-                )
-                .frame(height: geometry.size.height / 2)
+        VStack(spacing: 0) {
+            ImageHeader(
+                media: .score(value: viewModel.score, maxScore: Strings.Result.maxScore),
+                title: viewModel.title,
+                description: viewModel.description
+            )
+            .padding(.top, Spacing.twoXl)
 
-                Spacer()
+            Spacer()
 
-                ButtonDock(
-                    primaryText: Strings.Result.primaryButtonTitle,
-                    secondaryText: Strings.Result.secondaryButtonTitle,
-                    primaryAction: {},
-                    secondaryAction: { viewModel.retake()},
-                    secondaryLeadingIcon: Icon.arrowReturn
-                )
-                .padding(.top, Spacing.lg)
-            }
+            ButtonDock(
+                primaryText: Strings.Result.primaryButtonTitle,
+                secondaryText: Strings.Result.secondaryButtonTitle,
+                primaryAction: { isPresented = true },
+                secondaryAction: { viewModel.retake()},
+                secondaryLeadingIcon: Icon.arrowReturn
+            )
+            .padding(.top, Spacing.lg)
         }
+        .alert(Strings.Result.message,
+               isPresented: $isPresented,
+               actions: {})
     }
 }
 

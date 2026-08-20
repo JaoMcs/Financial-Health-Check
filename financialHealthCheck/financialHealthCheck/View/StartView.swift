@@ -22,28 +22,26 @@ struct StartView: View {
     }
 
     private var contentView: some View {
-        GeometryReader { geometry in
-            VStack(spacing: 0) {
-                ImageHeader(
-                    media: .image(Icon.mainImage),
-                    title: Strings.Start.title,
-                    description: Strings.Start.description
-                )
-                .frame(height: geometry.size.height / 2)
+        VStack(spacing: 0) {
+            ImageHeader(
+                media: .image(Icon.mainImage),
+                title: Strings.Start.title,
+                description: Strings.Start.description
+            )
+            .padding(.top, Spacing.twoXl)
 
-                Spacer()
+            Spacer()
 
-                AppButton(
-                    text: Strings.Start.buttonTitle,
-                    trailingIcon: Icon.rightArrowIcon,
-                    type: .primary,
-                    isLoading: viewModel.state.isLoading,
-                    action: viewModel.startTapped
-                )
-                .padding(.leading, Spacing.twoXl)
-                .padding(.trailing, Spacing.twoXl)
-                .padding(.top, Spacing.lg)
-            }
+            AppButton(
+                text: Strings.Start.buttonTitle,
+                trailingIcon: Icon.rightArrowIcon,
+                type: .primary,
+                isLoading: viewModel.state.isLoading,
+                action: viewModel.startTapped
+            )
+            .padding(.leading, Spacing.twoXl)
+            .padding(.trailing, Spacing.twoXl)
+            .padding(.top, Spacing.lg)
         }
     }
 }

@@ -59,7 +59,7 @@ final class ResultCoordinator: Coordinator {
     }
 
     private func goToFinish() {
-
+        print("Finish uhull :pray-cat:")
     }
 
 }

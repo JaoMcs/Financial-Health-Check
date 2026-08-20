@@ -240,8 +240,7 @@ or the final result):
 
 ![Trello board — task tracking for this assignment, from Backlog through Concluído](docs/screenshots/trello-tasks.png)
 
-Tasks were tracked on the Trello board linked above (each card's Motivation/Proposal/Helper
-links are in `docs/trello-cards.md`). The cards themselves are written in a simplified,
+Tasks were tracked on the Trello board linked above. The cards themselves are written in a simplified,
 single-glance way — not detailed specs — but they were what actually kept the project on
 track: a quick checkpoint of what was already done, what was next, and what was still open, so
 development never drifted or got lost along the way.
@@ -267,6 +266,6 @@ development never drifted or got lost along the way.
 - [Coordinator Pattern in SwiftUI: Keeping Navigation Logic Out of Your Views](https://levelup.gitconnected.com/coordinator-pattern-in-swiftui-keeping-navigation-logic-out-of-your-views-48c2fd8e35ab) — reference for the Coordinator tree (`coordinators/`).
 - [How to Use SwiftUI Coordinators](https://medium.com/@michaelmavris/how-to-use-swiftui-coordinators-1011ca881eef) by Michael Mavris — reference for the Coordinator tree (`coordinators/`).
 - [Swift: Writing a Generic HTTP Request](https://stackoverflow.com/questions/59777612/swift-writing-a-generic-http-request) — reference for `NetworkManager`'s generic `request<Response: Decodable>(...)` method.
-- [Designing a Swift Network Layer You Won't Regret](https://medium.com/@dilshodzopirov/designing-a-swift-network-layer-you-wont-regret-0c1b24ec6788) by Dilshod Zopirov — reference for splitting `NetworkManager` (transport) from `HealthCheckRepository` (domain), per `NETWORKING.md`.
+- [Designing a Swift Network Layer You Won't Regret](https://medium.com/@dilshodzopirov/designing-a-swift-network-layer-you-wont-regret-0c1b24ec6788) by Dilshod Zopirov — reference for splitting `NetworkManager` (transport) from `HealthCheckRepository` (domain).
 - [Custom Navigation Bar in SwiftUI](https://medium.com/@alessandromanilii/custom-navigation-bar-in-swiftui-f8a9ef0ac168) by Alessandro Manilii — reference for `NavigationHeader`/`NavigationHostingController`.
 - [Custom Back Button in Navigation in iOS](https://stackoverflow.com/questions/60500508/custom-back-button-in-navigation-in-ios) — reference for `NavigationHeader.styleBackButton`.

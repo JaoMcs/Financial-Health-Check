@@ -29,6 +29,7 @@ enum Strings {
         static let primaryButtonTitle = "Finish"
         static let secondaryButtonTitle = "Retake"
         static let maxScore = 100
+        static let message = "Congratulations on completing! 😀"
 
         /// The headline shown for `category`, `nil` treated the same as `.poor`.
         ///
