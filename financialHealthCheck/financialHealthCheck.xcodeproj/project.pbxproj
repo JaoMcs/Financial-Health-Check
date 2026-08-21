@@ -90,7 +90,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = AA1D7CBF302CBD5400382461 /* Build configuration list for PBXNativeTarget "financialHealthCheck" */;
 			buildPhases = (
-				AA1D7CD0302CBD5400382461 /* SwiftLint */,
 				AA1D7C92302CBD5300382461 /* Sources */,
 				AA1D7C93302CBD5300382461 /* Frameworks */,
 				AA1D7C94302CBD5300382461 /* Resources */,
@@ -187,28 +186,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		AA1D7CD0302CBD5400382461 /* SwiftLint */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = SwiftLint;
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin:/usr/local/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, run 'brew install swiftlint'\"\nfi\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		AA1D7C92302CBD5300382461 /* Sources */ = {
